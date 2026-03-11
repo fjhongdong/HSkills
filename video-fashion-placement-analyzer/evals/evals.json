@@ -1,0 +1,37 @@
+{
+  "skill_name": "video-fashion-placement-analyzer",
+  "evals": [
+    {
+      "id": 1,
+      "name": "fashion-vlog-suitable",
+      "prompt": "我上传了一个时尚博主分享日常穿搭的Vlog视频，请帮我分析这个视频是否适合服饰广告植入。",
+      "expected_output": "判定为适合植入，推荐休闲、街头、优雅等风格，给出详细分析报告",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "name": "landscape-video-not-suitable",
+      "prompt": "这是一个旅行风景视频，帮我看看能不能植入服装广告。",
+      "expected_output": "判定为不适合植入（无真人出镜），说明原因",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 3,
+      "name": "fitness-video-analysis",
+      "prompt": "帮我分析这个健身教学视频，看看适合植入什么风格的服饰。",
+      "expected_output": "判定为适合植入，推荐运动风格为主，分析受众群体特征",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 4,
+      "name": "cooking-video-partial",
+      "prompt": "这是一个美食探店视频，有博主出镜试吃，请问适合植入服饰广告吗？",
+      "expected_output": "判定为部分适合或适合，分析出镜情况和推荐风格",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}
