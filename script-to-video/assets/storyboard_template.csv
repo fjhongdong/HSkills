@@ -1,0 +1,7 @@
+场景编号,场景名称,镜头编号,景别,运镜,角色,动作描述,对白/旁白,时长(秒),光线,氛围,视频提示词,备注
+Scene_001,示例场景-咖啡厅相遇,001,ELS,Static,无,咖啡厅外观全景,无,3,golden hour,温馨,"extreme long shot, establishing shot of modern coffee shop exterior, golden hour sunset, warm lighting, cozy atmosphere, cinematic, high quality",建立镜头
+Scene_001,示例场景-咖啡厅相遇,002,MS,Push In,Sarah,女主角坐在窗边,无,4,warm window light,期待,"medium shot of young Asian woman with long black hair, sitting by window, looking outside, warm natural light, contemplative mood, shallow depth of field, cinematic",角色出场
+Scene_001,示例场景-咖啡厅相遇,003,CU,Static,Sarah,特写女主表情,无,2,soft side light,若有所思,"close-up of young Asian woman's face, gentle expression, soft side lighting, bokeh background, emotional, beautiful, cinematic portrait",情绪强调
+Scene_001,示例场景-咖啡厅相遇,004,MS,Tracking,John,男主角走进咖啡厅,无,3,mixed lighting,轻松,"tracking shot of young man in casual blazer walking through coffee shop door, confident stride, warm interior lighting, natural movement, cinematic",角色入场
+Scene_001,示例场景-咖啡厅相遇,005,OTS,Static,Sarah/John,过肩镜头捕捉眼神交汇,"(轻声) 这位置有人吗？",4,warm ambient,好奇紧张,"over-the-shoulder shot from behind woman, focusing on man's face, friendly smile, warm cafe lighting, intimate framing, cinematic",对话开始
+Scene_001,示例场景-咖啡厅相遇,006,2S,Slow Push In,Sarah/John,两人对坐交谈,无,5,golden warm,浪漫,"medium two-shot of young couple at cafe table, engaged in conversation, golden hour window light, warm romantic atmosphere, soft focus background, cinematic",情感升温

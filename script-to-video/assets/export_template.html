@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{project_name}} - 视频提示词分镜表</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --accent-color: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .meta-item .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .nav-tab:hover {
+            background: var(--bg-color);
+        }
+
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-primary { background: #dbeafe; color: #1d4ed8; }
+        .badge-success { background: #d1fae5; color: #059669; }
+        .badge-warning { background: #fef3c7; color: #d97706; }
+        .badge-danger { background: #fee2e2; color: #dc2626; }
+
+        /* Character Grid */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .character-card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .character-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .character-header {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .character-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .character-role {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .character-body {
+            padding: 1.5rem;
+        }
+
+        .character-section {
+            margin-bottom: 1rem;
+        }
+
+        .character-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .character-section-content {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .prompt-box {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            border-left: 3px solid var(--primary-color);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Scene Cards */
+        .scene-card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .scene-header {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scene-number {
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+        }
+
+        .scene-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .scene-body {
+            padding: 1.5rem;
+        }
+
+        .scene-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scene-info-item {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .scene-info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .scene-info-value {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Shot Table */
+        .shot-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .shot-table th,
+        .shot-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .shot-table th {
+            background: var(--bg-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .shot-table tr:hover {
+            background: #fafafa;
+        }
+
+        .shot-number {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .shot-type {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .shot-prompt {
+            background: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shot-duration {
+            font-weight: 500;
+            color: var(--accent-color);
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .copy-btn.copied {
+            background: var(--success-color);
+        }
+
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .meta-info {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .character-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .shot-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .nav-tabs,
+            .copy-btn {
+                display: none;
+            }
+
+            .section {
+                display: block !important;
+                page-break-before: always;
+            }
+
+            .card,
+            .character-card,
+            .scene-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>{{project_name}}</h1>
+            <p class="subtitle">AI视频生成提示词分镜表</p>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <span class="icon">📅</span>
+                    <span>生成时间: {{generated_at}}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="icon">🎬</span>
+                    <span>场景数: {{scene_count}}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="icon">📹</span>
+                    <span>镜头数: {{shot_count}}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="icon">👥</span>
+                    <span>角色数: {{character_count}}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="icon">⏱️</span>
+                    <span>预估时长: {{total_duration}}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-section="overview">概览</button>
+            <button class="nav-tab" data-section="characters">角色设定</button>
+            <button class="nav-tab" data-section="scenes">场景分镜</button>
+            <button class="nav-tab" data-section="export">批量导出</button>
+        </nav>
+
+        <!-- Overview Section -->
+        <section id="overview" class="section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">{{scene_count}}</div>
+                    <div class="stat-label">场景总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{shot_count}}</div>
+                    <div class="stat-label">镜头总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{character_count}}</div>
+                    <div class="stat-label">角色数量</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{total_duration}}</div>
+                    <div class="stat-label">预估总时长</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">项目概要</h3>
+                </div>
+                <div class="scene-info-grid">
+                    <div class="scene-info-item">
+                        <div class="scene-info-label">视频风格</div>
+                        <div class="scene-info-value">{{video_style}}</div>
+                    </div>
+                    <div class="scene-info-item">
+                        <div class="scene-info-label">画面比例</div>
+                        <div class="scene-info-value">{{aspect_ratio}}</div>
+                    </div>
+                    <div class="scene-info-item">
+                        <div class="scene-info-label">整体基调</div>
+                        <div class="scene-info-value">{{overall_mood}}</div>
+                    </div>
+                    <div class="scene-info-item">
+                        <div class="scene-info-label">色彩风格</div>
+                        <div class="scene-info-value">{{color_style}}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Characters Section -->
+        <section id="characters" class="section">
+            <div class="character-grid">
+                {{#each characters}}
+                <div class="character-card">
+                    <div class="character-header">
+                        <div class="character-avatar">{{initial}}</div>
+                        <div class="character-name">{{name}}</div>
+                        <div class="character-role">{{role}}</div>
+                    </div>
+                    <div class="character-body">
+                        <div class="character-section">
+                            <div class="character-section-title">外貌特征</div>
+                            <div class="character-section-content">{{appearance}}</div>
+                        </div>
+                        <div class="character-section">
+                            <div class="character-section-title">服装设定</div>
+                            <div class="character-section-content">{{costume}}</div>
+                        </div>
+                        <div class="character-section">
+                            <div class="character-section-title">角色种子词</div>
+                            <div class="prompt-box">{{seed_prompt}}</div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard(this, '{{seed_prompt}}')">
+                            📋 复制提示词
+                        </button>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </section>
+
+        <!-- Scenes Section -->
+        <section id="scenes" class="section">
+            {{#each scenes}}
+            <div class="scene-card">
+                <div class="scene-header">
+                    <div>
+                        <span class="scene-number">场景 {{scene_number}}</span>
+                        <h3 class="scene-title">{{scene_name}}</h3>
+                    </div>
+                    <span class="badge badge-primary">{{shot_count}} 个镜头</span>
+                </div>
+                <div class="scene-body">
+                    <div class="scene-info-grid">
+                        <div class="scene-info-item">
+                            <div class="scene-info-label">场景类型</div>
+                            <div class="scene-info-value">{{location_type}}</div>
+                        </div>
+                        <div class="scene-info-item">
+                            <div class="scene-info-label">时间</div>
+                            <div class="scene-info-value">{{time_of_day}}</div>
+                        </div>
+                        <div class="scene-info-item">
+                            <div class="scene-info-label">光线</div>
+                            <div class="scene-info-value">{{lighting}}</div>
+                        </div>
+                        <div class="scene-info-item">
+                            <div class="scene-info-label">氛围</div>
+                            <div class="scene-info-value">{{mood}}</div>
+                        </div>
+                    </div>
+
+                    <div class="character-section">
+                        <div class="character-section-title">场景种子词</div>
+                        <div class="prompt-box">{{scene_seed_prompt}}</div>
+                        <button class="copy-btn" style="margin-top: 0.5rem;" onclick="copyToClipboard(this, '{{scene_seed_prompt}}')">
+                            📋 复制场景提示词
+                        </button>
+                    </div>
+
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--text-primary);">镜头列表</h4>
+                    <table class="shot-table">
+                        <thead>
+                            <tr>
+                                <th>镜头</th>
+                                <th>景别</th>
+                                <th>描述</th>
+                                <th>时长</th>
+                                <th>提示词</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each shots}}
+                            <tr>
+                                <td><span class="shot-number">{{shot_number}}</span></td>
+                                <td><span class="shot-type">{{shot_type}}</span></td>
+                                <td>{{description}}</td>
+                                <td><span class="shot-duration">{{duration}}s</span></td>
+                                <td>
+                                    <div class="shot-prompt">{{prompt}}</div>
+                                </td>
+                                <td>
+                                    <button class="copy-btn" onclick="copyToClipboard(this, '{{prompt}}')">📋</button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{/each}}
+        </section>
+
+        <!-- Export Section -->
+        <section id="export" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">批量导出所有提示词</h3>
+                </div>
+
+                <h4 style="margin-bottom: 1rem;">角色提示词</h4>
+                <div class="prompt-box" id="all-character-prompts">
+{{all_character_prompts}}
+                </div>
+                <button class="copy-btn" style="margin: 1rem 0;" onclick="copyToClipboard(this, document.getElementById('all-character-prompts').innerText)">
+                    📋 复制所有角色提示词
+                </button>
+
+                <h4 style="margin: 2rem 0 1rem;">场景提示词</h4>
+                <div class="prompt-box" id="all-scene-prompts">
+{{all_scene_prompts}}
+                </div>
+                <button class="copy-btn" style="margin: 1rem 0;" onclick="copyToClipboard(this, document.getElementById('all-scene-prompts').innerText)">
+                    📋 复制所有场景提示词
+                </button>
+
+                <h4 style="margin: 2rem 0 1rem;">所有镜头提示词</h4>
+                <div class="prompt-box" id="all-shot-prompts" style="max-height: 500px; overflow-y: auto;">
+{{all_shot_prompts}}
+                </div>
+                <button class="copy-btn" style="margin: 1rem 0;" onclick="copyToClipboard(this, document.getElementById('all-shot-prompts').innerText)">
+                    📋 复制所有镜头提示词
+                </button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>由 <strong>Script-to-Video-Prompts</strong> 自动生成</p>
+            <p>© 2024 AI Video Prompt Generator | 专业剧本转视频提示词工具</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and sections
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding section
+                tab.classList.add('active');
+                const sectionId = tab.dataset.section;
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Copy to Clipboard
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✓ 已复制';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+
+        // Keyboard shortcut for copy all
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                const activeSection = document.querySelector('.section.active');
+                if (activeSection.id === 'export') {
+                    const allPrompts = document.getElementById('all-shot-prompts').innerText;
+                    copyToClipboard(document.querySelector('#export .copy-btn'), allPrompts);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

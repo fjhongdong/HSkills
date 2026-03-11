@@ -1,0 +1,136 @@
+{
+  "project_info": {
+    "project_name": "项目名称",
+    "version": "1.0",
+    "created_at": "2024-01-01",
+    "author": "作者"
+  },
+  "global_settings": {
+    "video_style": "cinematic",
+    "aspect_ratio": "16:9",
+    "quality_keywords": ["high quality", "detailed", "cinematic", "professional"],
+    "negative_keywords": ["blurry", "distorted", "low quality", "artifacts"]
+  },
+  "characters": [
+    {
+      "id": "CHAR_001",
+      "name": "角色名",
+      "name_en": "Character Name",
+      "role": "主角/配角/群演",
+      "importance": "primary",
+      "basic_info": {
+        "gender": "female",
+        "age": "25-30",
+        "ethnicity": "Asian",
+        "body_type": "slim"
+      },
+      "appearance": {
+        "hair": {
+          "style": "long wavy",
+          "color": "black",
+          "keywords": ["long black wavy hair", "side part"]
+        },
+        "face": {
+          "shape": "oval",
+          "features": ["large almond eyes", "high cheekbones", "full lips"],
+          "distinctive_marks": ["beauty mark near left eye", "dimples when smiling"]
+        },
+        "skin": {
+          "tone": "fair",
+          "keywords": ["fair skin", "smooth complexion"]
+        }
+      },
+      "costumes": [
+        {
+          "id": "COSTUME_A",
+          "name": "日常装",
+          "scenes": ["1", "2", "3"],
+          "description": {
+            "upper": "white silk blouse",
+            "lower": "high-waisted black trousers",
+            "accessories": ["silver necklace", "small earrings"],
+            "shoes": "black heels"
+          },
+          "style_keywords": ["elegant", "professional", "modern"]
+        },
+        {
+          "id": "COSTUME_B",
+          "name": "晚装",
+          "scenes": ["4", "5"],
+          "description": {
+            "dress": "burgundy wrap dress",
+            "accessories": ["gold bracelet", "statement earrings"],
+            "shoes": "nude heels"
+          },
+          "style_keywords": ["romantic", "sophisticated", "evening"]
+        }
+      ],
+      "personality": {
+        "traits": ["intelligent", "reserved", "passionate"],
+        "default_expression": "contemplative",
+        "movement_style": "graceful"
+      },
+      "seed_prompts": {
+        "full_body": "[CHARACTER:CHAR_001] 25-30 year old Asian female, slim build, long black wavy hair with side part, large almond eyes, beauty mark near left eye, fair skin, elegant posture, consistent appearance, same person, maintaining identity",
+        "close_up": "[CHARACTER:CHAR_001] young Asian woman, long black wavy hair, large almond eyes with beauty mark near left eye, fair smooth skin, contemplative expression, consistent appearance",
+        "costume_a": "wearing white silk blouse and high-waisted black trousers, silver necklace, elegant professional style",
+        "costume_b": "wearing burgundy wrap dress, gold bracelet, sophisticated romantic evening style"
+      },
+      "consistency_checklist": {
+        "must_have": ["long black wavy hair", "almond eyes", "beauty mark left eye"],
+        "should_have": ["fair skin", "slim build", "elegant posture"],
+        "nice_to_have": ["dimples when smiling", "graceful movement"]
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "id": "SCENE_001",
+      "name": "场景名称",
+      "location": {
+        "type": "interior",
+        "place": "coffee shop",
+        "specific": "modern urban cafe"
+      },
+      "environment": {
+        "key_elements": ["exposed brick wall", "large windows", "wooden tables", "pendant lights"],
+        "props": ["coffee cups", "laptop", "potted plants"],
+        "background": "busy street visible through windows"
+      },
+      "atmosphere": {
+        "time_of_day": "morning",
+        "weather": "sunny",
+        "lighting": {
+          "type": "mixed natural and artificial",
+          "direction": "from right side windows",
+          "color_temperature": "warm golden",
+          "intensity": "medium soft"
+        },
+        "mood": "cozy, intimate, warm",
+        "color_palette": ["warm browns", "golden yellows", "soft greens"]
+      },
+      "seed_prompt": "[SCENE:COFFEE_SHOP] interior modern coffee shop, exposed brick wall on left, large windows on right, wooden tables, hanging pendant lights, green plants, warm morning light from windows, cozy earth tones, consistent environment, maintaining location",
+      "lighting_seed": "[LIGHTING:COFFEE_MORNING] mixed natural and artificial lighting, soft daylight from large windows on right side, warm pendant lights overhead, warm golden tones, medium soft intensity, consistent lighting throughout scene"
+    }
+  ],
+  "shots_template": [
+    {
+      "scene_id": "SCENE_001",
+      "shot_number": 1,
+      "shot_type": "ELS",
+      "shot_type_full": "Extreme Long Shot",
+      "camera_movement": "static",
+      "camera_angle": "eye level",
+      "duration_seconds": 3,
+      "characters_in_shot": [],
+      "action_description": "建立镜头，展示咖啡厅外观",
+      "dialogue": null,
+      "emotion": "establishing",
+      "transition_in": "fade in",
+      "transition_out": "cut",
+      "prompt_template": "[SCENE:{{scene_id}}] {{shot_type}} shot, {{camera_movement}}, {{action}}, {{lighting}}, {{mood}}, {{style_keywords}}, {{quality_keywords}}",
+      "generated_prompt": "",
+      "notes": "开场建立镜头"
+    }
+  ]
+}
