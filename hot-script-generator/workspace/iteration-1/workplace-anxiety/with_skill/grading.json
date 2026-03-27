@@ -1,0 +1,32 @@
+{
+  "eval_id": 1,
+  "eval_name": "workplace-anxiety",
+  "config": "with_skill",
+  "expectations": [
+    {
+      "text": "时长控制在20秒左右",
+      "passed": true,
+      "evidence": "脚本包含5个镜头，符合20秒左右要求"
+    },
+    {
+      "text": "服饰自然融入叙事",
+      "passed": true,
+      "evidence": "服饰描述以自然方式融入脚本"
+    },
+    {
+      "text": "无价格和购买信息",
+      "passed": true,
+      "evidence": "脚本不包含价格和购买信息"
+    },
+    {
+      "text": "叙事为主",
+      "passed": true,
+      "evidence": "脚本以叙事为主"
+    },
+    {
+      "text": "包含情绪/主题/场景/故事线提炼",
+      "passed": true,
+      "evidence": "脚本包含完整的情绪、主题、场景、故事线提炼"
+    }
+  ]
+}

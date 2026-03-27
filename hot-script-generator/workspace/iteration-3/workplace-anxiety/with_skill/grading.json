@@ -1,0 +1,52 @@
+{
+  "eval_id": 1,
+  "eval_name": "workplace-anxiety",
+  "config": "with_skill",
+  "expectations": [
+    {
+      "text": "包含热榜分析部分",
+      "passed": true,
+      "evidence": "脚本包含热榜分析部分"
+    },
+    {
+      "text": "包含情绪深度分析",
+      "passed": true,
+      "evidence": "包含情绪深度分析（4/4项）"
+    },
+    {
+      "text": "包含主题深度挖掘",
+      "passed": true,
+      "evidence": "包含主题深度挖掘（4/4项）"
+    },
+    {
+      "text": "包含推演结果",
+      "passed": true,
+      "evidence": "包含推演结果（3/3项）"
+    },
+    {
+      "text": "时长15-30秒",
+      "passed": true,
+      "evidence": "脚本包含5个镜头，符合15-30秒要求"
+    },
+    {
+      "text": "无服装特写镜头",
+      "passed": true,
+      "evidence": "脚本无服装特写镜头"
+    },
+    {
+      "text": "前3秒有钩子",
+      "passed": true,
+      "evidence": "前3秒设置了钩子"
+    },
+    {
+      "text": "受众一致性",
+      "passed": true,
+      "evidence": "脚本受众与服饰受众一致"
+    },
+    {
+      "text": "无价格和购买信息",
+      "passed": true,
+      "evidence": "脚本不包含价格和购买信息"
+    }
+  ]
+}

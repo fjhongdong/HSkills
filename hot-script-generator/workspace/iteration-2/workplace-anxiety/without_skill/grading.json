@@ -1,0 +1,47 @@
+{
+  "eval_id": 1,
+  "eval_name": "workplace-anxiety",
+  "config": "without_skill",
+  "expectations": [
+    {
+      "text": "时长15-30秒",
+      "passed": false,
+      "evidence": "脚本包含0个镜头，不符合15-30秒要求"
+    },
+    {
+      "text": "无服装特写镜头",
+      "passed": false,
+      "evidence": "发现服装特写：['特写.*西装', '特写.*外套', '镜头特写.*外套', '镜头特写.*西装']"
+    },
+    {
+      "text": "服饰一致性",
+      "passed": true,
+      "evidence": "服饰描述前后一致"
+    },
+    {
+      "text": "前3秒有钩子",
+      "passed": false,
+      "evidence": "未发现前3秒钩子设置"
+    },
+    {
+      "text": "受众一致性",
+      "passed": true,
+      "evidence": "脚本受众与服饰受众一致"
+    },
+    {
+      "text": "包含受众画像",
+      "passed": false,
+      "evidence": "脚本缺少【受众画像】字段"
+    },
+    {
+      "text": "无价格和购买信息",
+      "passed": false,
+      "evidence": "脚本包含价格或购买信息"
+    },
+    {
+      "text": "叙事为主",
+      "passed": false,
+      "evidence": "脚本叙事性不足"
+    }
+  ]
+}

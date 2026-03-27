@@ -1,0 +1,88 @@
+{
+  "skill_name": "hot-script-generator",
+  "iteration": 1,
+  "timestamp": "2026-03-26T12:00:00Z",
+  "summary": {
+    "with_skill": {
+      "pass_rate": 1.0,
+      "mean_duration_seconds": 58.5,
+      "std_duration_seconds": 5.8,
+      "mean_tokens": 29792,
+      "std_tokens": 399
+    },
+    "without_skill": {
+      "pass_rate": 0.0,
+      "mean_duration_seconds": 69.3,
+      "std_duration_seconds": 6.6,
+      "mean_tokens": 27883,
+      "std_tokens": 227
+    }
+  },
+  "delta": {
+    "pass_rate": 1.0,
+    "duration_seconds": -10.8,
+    "tokens": 1909
+  },
+  "per_eval": [
+    {
+      "eval_id": 1,
+      "eval_name": "workplace-anxiety",
+      "with_skill": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "total": 5,
+        "duration_seconds": 61.6,
+        "tokens": 29739
+      },
+      "without_skill": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "total": 5,
+        "duration_seconds": 77.5,
+        "tokens": 28177
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "healing-lifestyle",
+      "with_skill": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "total": 5,
+        "duration_seconds": 62.5,
+        "tokens": 30218
+      },
+      "without_skill": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "total": 5,
+        "duration_seconds": 66.3,
+        "tokens": 27639
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "emotional-relationship",
+      "with_skill": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "total": 5,
+        "duration_seconds": 51.4,
+        "tokens": 29420
+      },
+      "without_skill": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "total": 5,
+        "duration_seconds": 64.1,
+        "tokens": 27834
+      }
+    }
+  ],
+  "analyst_notes": [
+    "有技能版本在所有3个测试用例上均100%通过，无技能版本0%通过",
+    "有技能版本平均用时更短（58.5秒 vs 69.3秒），说明技能指导让模型更高效",
+    "无技能版本的主要问题：1) 时长过长（60秒、20秒带教学、45秒）2) 包含价格和购买链接 3) 包含教学式建议",
+    "技能有效解决了用户的核心需求：20秒叙事为主的软植入脚本"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "eval_id": 1,
+  "eval_name": "batch-hotspots",
+  "config": "with_skill",
+  "expectations": [
+    {
+      "text": "包含批量热点分析报告",
+      "passed": true,
+      "evidence": "包含批量热点分析报告"
+    },
+    {
+      "text": "包含热点概览和情绪分布",
+      "passed": true,
+      "evidence": "包含热点概览和情绪分布"
+    },
+    {
+      "text": "包含核心议题提炼",
+      "passed": true,
+      "evidence": "包含核心议题提炼"
+    },
+    {
+      "text": "包含情绪趋势判断",
+      "passed": true,
+      "evidence": "包含情绪趋势判断"
+    },
+    {
+      "text": "包含热点质量评估",
+      "passed": true,
+      "evidence": "包含热点质量评估"
+    },
+    {
+      "text": "包含自动选择结果",
+      "passed": true,
+      "evidence": "包含自动选择结果"
+    },
+    {
+      "text": "包含季节适配检测",
+      "passed": true,
+      "evidence": "包含季节适配检测"
+    },
+    {
+      "text": "包含热榜分析部分",
+      "passed": true,
+      "evidence": "包含热榜分析部分"
+    },
+    {
+      "text": "包含情绪深度分析",
+      "passed": true,
+      "evidence": "包含情绪深度分析（4/4项）"
+    },
+    {
+      "text": "包含推演结果",
+      "passed": true,
+      "evidence": "包含推演结果（3/3项）"
+    },
+    {
+      "text": "时长15-30秒",
+      "passed": true,
+      "evidence": "脚本包含4个镜头，符合15-30秒要求"
+    },
+    {
+      "text": "无服装特写镜头",
+      "passed": true,
+      "evidence": "脚本无服装特写镜头"
+    },
+    {
+      "text": "无价格和购买信息",
+      "passed": true,
+      "evidence": "脚本不包含价格和购买信息"
+    },
+    {
+      "text": "叙事为主",
+      "passed": true,
+      "evidence": "脚本以叙事为主"
+    }
+  ]
+}

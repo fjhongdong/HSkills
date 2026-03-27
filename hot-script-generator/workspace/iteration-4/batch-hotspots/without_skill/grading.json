@@ -1,0 +1,67 @@
+{
+  "eval_id": 1,
+  "eval_name": "batch-hotspots",
+  "config": "without_skill",
+  "expectations": [
+    {
+      "text": "包含批量热点分析报告",
+      "passed": false,
+      "evidence": "缺少批量热点分析报告"
+    },
+    {
+      "text": "包含热点概览和情绪分布",
+      "passed": false,
+      "evidence": "缺少热点概览或情绪分布"
+    },
+    {
+      "text": "包含核心议题提炼",
+      "passed": false,
+      "evidence": "缺少核心议题提炼"
+    },
+    {
+      "text": "包含情绪趋势判断",
+      "passed": false,
+      "evidence": "缺少情绪趋势判断"
+    },
+    {
+      "text": "包含自动选择结果",
+      "passed": false,
+      "evidence": "缺少自动选择结果"
+    },
+    {
+      "text": "包含热榜分析部分",
+      "passed": false,
+      "evidence": "缺少热榜分析部分"
+    },
+    {
+      "text": "包含情绪深度分析",
+      "passed": false,
+      "evidence": "情绪深度分析不完整（0/4项）"
+    },
+    {
+      "text": "包含推演结果",
+      "passed": false,
+      "evidence": "推演结果不完整（0/3项）"
+    },
+    {
+      "text": "时长15-30秒",
+      "passed": false,
+      "evidence": "脚本时长不符合15-30秒要求（约30秒）"
+    },
+    {
+      "text": "无服装特写镜头",
+      "passed": false,
+      "evidence": "发现服装特写"
+    },
+    {
+      "text": "无价格和购买信息",
+      "passed": false,
+      "evidence": "脚本包含价格或购买信息"
+    },
+    {
+      "text": "叙事为主",
+      "passed": false,
+      "evidence": "脚本叙事性不足"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "eval_id": 1,
+  "eval_name": "batch-hotspots",
+  "prompt": "用户提供了5条抖音热榜，请生成服饰种草脚本",
+  "assertions": [
+    {"name": "包含批量热点分析报告", "description": "脚本包含## 批量热点分析报告部分"},
+    {"name": "包含热点概览和情绪分布", "description": "包含热点概览、情绪分布分析"},
+    {"name": "包含核心议题提炼", "description": "包含核心议题提炼表格"},
+    {"name": "包含情绪趋势判断", "description": "包含情绪趋势判断"},
+    {"name": "包含热点质量评估", "description": "包含热点质量评估结果，显示评级和建议"},
+    {"name": "包含自动选择结果", "description": "包含系统自动选择热点的说明"},
+    {"name": "包含季节适配检测", "description": "包含季节适配检测结果"},
+    {"name": "包含热榜分析部分", "description": "包含已选热点的深度分析"},
+    {"name": "包含情绪深度分析", "description": "包含表层情绪、深层情绪、情绪矛盾、情绪出口"},
+    {"name": "包含推演结果", "description": "包含推演场景、推演风格、推演故事线"},
+    {"name": "时长15-30秒", "description": "脚本时长在15-30秒范围内"},
+    {"name": "无服装特写镜头", "description": "无服装细节特写、标签展示"},
+    {"name": "无价格和购买信息", "description": "不包含价格、购买链接、产品信息表格"},
+    {"name": "叙事为主", "description": "脚本以故事为核心"}
+  ]
+}

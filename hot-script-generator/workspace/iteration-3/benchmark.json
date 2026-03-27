@@ -1,0 +1,49 @@
+{
+  "skill_name": "hot-script-generator",
+  "iteration": 3,
+  "timestamp": "2026-03-26T16:00:00Z",
+  "summary": {
+    "with_skill": {
+      "pass_rate": 0.963,
+      "mean_duration_seconds": 135.6,
+      "mean_tokens": 41373
+    },
+    "without_skill": {
+      "pass_rate": 0.111,
+      "mean_duration_seconds": 69.5,
+      "mean_tokens": 28075
+    }
+  },
+  "delta": {
+    "pass_rate": 0.852,
+    "duration_seconds": 66.1,
+    "tokens": 13298
+  },
+  "per_eval": [
+    {
+      "eval_id": 1,
+      "eval_name": "workplace-anxiety",
+      "with_skill": {"pass_rate": 1.0, "passed": 9, "total": 9},
+      "without_skill": {"pass_rate": 0.111, "passed": 1, "total": 9}
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "healing-lifestyle",
+      "with_skill": {"pass_rate": 0.889, "passed": 8, "total": 9},
+      "without_skill": {"pass_rate": 0.111, "passed": 1, "total": 9}
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "emotional-relationship",
+      "with_skill": {"pass_rate": 1.0, "passed": 9, "total": 9},
+      "without_skill": {"pass_rate": 0.111, "passed": 1, "total": 9}
+    }
+  ],
+  "analyst_notes": [
+    "有技能版本在3个测试用例上平均96.3%通过（26/27），无技能版本仅11.1%通过（3/27）",
+    "新增的【热榜分析】模块有效落实：情绪深度分析、主题深度挖掘、推演结果均已包含",
+    "有技能版本输出更深度：包含表层情绪→深层情绪→情绪矛盾→情绪出口的完整分析链路",
+    "无技能版本主要问题：1) 缺少热榜分析部分 2) 缺少推演过程 3) 仍包含价格信息/教学建议",
+    "技能的深度分析+推演机制有效提升了内容的深度和针对性"
+  ]
+}

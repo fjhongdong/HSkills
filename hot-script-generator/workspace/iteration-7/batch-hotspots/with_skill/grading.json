@@ -1,0 +1,67 @@
+{
+  "eval_id": 1,
+  "eval_name": "batch-hotspots",
+  "config": "with_skill",
+  "expectations": [
+    {
+      "text": "包含批量热点分析报告",
+      "passed": true,
+      "evidence": "包含批量热点分析报告"
+    },
+    {
+      "text": "包含热点质量评估",
+      "passed": true,
+      "evidence": "包含热点质量评估"
+    },
+    {
+      "text": "包含季节适配检测",
+      "passed": true,
+      "evidence": "包含季节适配检测"
+    },
+    {
+      "text": "包含多样化维度标注",
+      "passed": true,
+      "evidence": "包含多样化维度标注（4/4项）"
+    },
+    {
+      "text": "包含BGM建议",
+      "passed": true,
+      "evidence": "包含BGM建议（4/4项）"
+    },
+    {
+      "text": "包含标题建议",
+      "passed": true,
+      "evidence": "包含标题建议"
+    },
+    {
+      "text": "包含话题标签推荐",
+      "passed": true,
+      "evidence": "包含话题标签推荐"
+    },
+    {
+      "text": "包含脚本自检报告",
+      "passed": true,
+      "evidence": "包含脚本自检报告"
+    },
+    {
+      "text": "自检报告有总分",
+      "passed": true,
+      "evidence": "自检报告包含总分和等级"
+    },
+    {
+      "text": "无服装特写镜头",
+      "passed": true,
+      "evidence": "脚本无服装特写镜头"
+    },
+    {
+      "text": "无价格和购买信息",
+      "passed": true,
+      "evidence": "脚本不包含价格和购买信息"
+    },
+    {
+      "text": "叙事为主",
+      "passed": true,
+      "evidence": "脚本以叙事为主"
+    }
+  ]
+}
