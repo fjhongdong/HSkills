@@ -1,160 +1,160 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+本文件为 Claude Code (claude.ai/code) 在此仓库中工作时提供指导。
 
-## Project Overview
+## 项目概述
 
-HSkills is a collection of Claude Code Skills focused on three core domains: **short video content creation**, **fashion/apparel**, and **AI video generation**. Each skill is an independent functional unit triggered by natural language.
+HSkills 是一组 Claude Code Skills，专注于三大核心领域：**短视频内容创作**、**服饰/时尚**、**AI 视频生成**。每个 Skill 都是独立的功能单元，通过自然语言触发。
 
-## Architecture
+## 架构
 
-### Skill Structure
+### Skill 结构
 
-Each skill follows a standardized structure:
+每个 Skill 遵循标准化结构：
 
 ```
 skill-name/
-├── SKILL.md          # Required - Skill definition with frontmatter
-├── scripts/          # Optional - Automation scripts
-├── references/       # Optional - Reference documentation
-├── evals/           # Recommended - Evaluation tests
-└── workspace/       # Optional - Working directory for iterations
+├── SKILL.md          # 必需 - 包含 frontmatter 的 Skill 定义
+├── scripts/          # 可选 - 自动化脚本
+├── references/       # 可选 - 参考文档
+├── evals/           # 推荐 - 评估测试
+└── workspace/       # 可选 - 迭代工作目录
 ```
 
-### SKILL.md Format
+### SKILL.md 格式
 
-Every SKILL.md must start with YAML frontmatter:
+每个 SKILL.md 必须以 YAML frontmatter 开头：
 
 ```yaml
 ---
 name: skill-name
-description: Detailed description including trigger keywords and core functionality
+description: 详细描述，包含触发关键词和核心功能
 ---
 ```
 
-The description field should include:
-- Core functionality
-- Trigger keywords/phrases
-- When to activate the skill
+description 字段应包含：
+- 核心功能
+- 触发关键词/短语
+- Skill 激活时机
 
-### Skill Categories
+### Skill 分类
 
-| Category | Skills |
-|----------|--------|
-| Short Video Creation | hot-script-generator, video-shot-breakdown |
-| Fashion/Apparel | clothing-analyzer, outfit-character-generator, video-fashion-placement-analyzer |
-| AI Video | script-to-video |
-| Utilities | music-matcher, github-repo-search |
+| 分类 | Skills |
+|------|--------|
+| 短视频创作 | hot-script-generator, video-shot-breakdown |
+| 服饰/时尚 | clothing-analyzer, outfit-character-generator, video-fashion-placement-analyzer |
+| AI 视频 | script-to-video |
+| 工具类 | music-matcher, github-repo-search |
 
-## Development Commands
+## 开发命令
 
-### Environment Setup
+### 环境配置
 
 ```bash
-# Video processing
+# 视频处理
 brew install ffmpeg
 
-# Audio analysis (for music-matcher)
+# 音频分析（music-matcher 使用）
 pip install librosa numpy scipy
 
-# Document parsing (for script-to-video)
+# 文档解析（script-to-video 使用）
 pip install python-docx pdfplumber
 
-# HTTP requests
+# HTTP 请求
 pip install requests
 ```
 
-### Running Scripts
+### 运行脚本
 
 ```bash
-# Extract frames from video (video-fashion-placement-analyzer)
+# 从视频提取帧（video-fashion-placement-analyzer）
 python video-fashion-placement-analyzer/scripts/extract_frames.py <video_path> [output_dir] [--mode basic|scene]
 
-# Script-to-video tools
+# 剧本转视频工具
 python script-to-video/scripts/parse_script.py <script_file>
 python script-to-video/scripts/character_extractor.py <script_file>
 python script-to-video/scripts/scene_analyzer.py <script_file>
 ```
 
-## Key Design Principles
+## 关键设计原则
 
-### hot-script-generator Iron Laws
+### hot-script-generator 铁律
 
-1. **Seed Core (种草核心)**: No clothing close-ups; apparel only as story background
-2. **Consistency (全片一致性)**: Character and clothing must be completely consistent throughout
-3. **Viral Adaptation (爆款适配)**: 9:16 vertical format, strong hook in first 3 seconds, 15-30 seconds, 4-8 shots
-4. **Aesthetic Compliance (审美合规)**: Follow Eastern positive aesthetic principles
+1. **种草核心**: 无服饰特写；服饰仅作为故事背景
+2. **全片一致性**: 角色与服饰全片完全一致
+3. **爆款适配**: 9:16 竖屏格式，前 3 秒强钩子，15-30 秒时长，4-8 个镜头
+4. **审美合规**: 遵循东方正向审美原则
 
-### github-repo-search Workflow Constraint
+### github-repo-search 工作流约束
 
-**Requirements convergence is mandatory** - Before any search, must confirm with user:
-- Topic (agent memory, RAG, browser automation, etc.)
-- Quantity (Top 10/Top 20)
-- Minimum stars (default: 100)
-- Sort mode (relevance-first or stars-first)
-- Target form (product/framework/documentation)
+**需求收敛是强制性的** - 任何搜索前，必须与用户确认：
+- 主题（agent memory、RAG、browser automation 等）
+- 数量（Top 10/Top 20）
+- 最低星数（默认：100）
+- 排序方式（相关性优先或星数优先）
+- 目标形式（产品/框架/文档）
 
-Do not skip this step even if user says "just search directly".
+即使用户说"直接搜索"，也不可跳过此步骤。
 
-### Multi-dimensional Diversity Strategy
+### 多维多样化策略
 
-When generating scripts, use 9 dimensions to avoid homogenization:
-1. Script type (drama/vlog/atmosphere/couple/seasonal/travel)
-2. Opening hook (visual impact/emotional impact/suspense/conflict/surprise/contrast)
-3. Narrative structure (linear/flashback/insert/montage/loop)
-4. Emotional tone (healing/passionate/melancholic/humorous/quiet/reversal)
-5. Visual style (Japanese/Korean/Western/Chinese/home/urban)
-6. Camera language (handheld/fixed/aerial/POV/following/slow-motion)
-7. Dialogue style (monologue/conversation/silent/voiceover/phone/internet-slang)
-8. Pacing (slow/fast/gradual/balanced)
-9. Innovation elements (reversal/contrast/symbol/time-jump/transition/frame-narrative)
+生成脚本时，使用 9 个维度避免同质化：
+1. 脚本类型（剧情/vlog/氛围/情侣/季节/旅行）
+2. 开场钩子（视觉冲击/情感冲击/悬念/冲突/惊喜/对比）
+3. 叙事结构（线性/倒叙/插叙/蒙太奇/循环）
+4. 情绪基调（治愈/热烈/忧郁/幽默/静谧/反转）
+5. 视觉风格（日系/韩系/西式/中式/家居/都市）
+6. 镜头语言（手持/固定/航拍/POV/跟拍/慢动作）
+7. 对话风格（独白/对话/默片/旁白/电话/网感）
+8. 节奏（慢/快/渐变/平衡）
+9. 创新元素（反转/对比/象征/时间跳跃/转场/套层叙事）
 
-### Douyin Viral Rhythm Framework (Multi-Climax Design)
+### 抖音爆款节奏框架（多高潮设计）
 
-For 15-30 second scripts, design 2-3 climax points:
-- **0-3s**: Strong hook (visual/emotional impact)
-- **3-8s**: First climax (core emotion or key moment)
-- **8-15s**: Buildup/tension phase
-- **15-22s**: Second climax (emotion peak or reversal)
-- **22-30s**: Closing/coda (gentle landing or memorable ending)
+对于 15-30 秒脚本，设计 2-3 个高潮点：
+- **0-3秒**: 强钩子（视觉/情感冲击）
+- **3-8秒**: 第一高潮（核心情绪或关键时刻）
+- **8-15秒**: 铺垫/张力阶段
+- **15-22秒**: 第二高潮（情绪峰值或反转）
+- **22-30秒**: 收尾/尾声（温和落地或难忘结尾）
 
-Script generation formula: `脚本 = 热点深度分析报告 + 角色形象分析 + 9维度多样化策略 + 爆款节奏框架`
+脚本生成公式：`脚本 = 热点深度分析报告 + 角色形象分析 + 9维度多样化策略 + 爆款节奏框架`
 
-### Hotspot Analysis Report Structure (hot-script-generator)
+### 热点分析报告结构（hot-script-generator）
 
-Every hotspot analysis must include 9 parts:
-1. 热点信息 (title, summary, emotion tone)
-2. 情绪深度分析 (surface → deep → contradictions → outlets)
-3. 主题深度挖掘 (phenomenon → issue → pain point → audience → value)
-4. 推演结果 (scene, style, storyline, emotion arc, character state)
-5. 标签提炼 (emotion/theme/scene/style/audience tags)
-6. 关键词提炼 (core/emotion/scene/action/visual keywords)
-7. 议题分析 (core issue, background, heat, demand, transformation)
-8. 题材预测 (suitable script types, spread potential, viral possibility)
-9. 创作建议 (recommended script/hook types, key points)
+每个热点分析必须包含 9 个部分：
+1. 热点信息（标题、摘要、情绪基调）
+2. 情绪深度分析（表层 → 深层 → 矛盾点 → 出口）
+3. 主题深度挖掘（现象 → 议题 → 痛点 → 受众 → 价值）
+4. 推演结果（场景、风格、故事线、情绪曲线、角色状态）
+5. 标签提炼（情绪/主题/场景/风格/受众标签）
+6. 关键词提炼（核心/情绪/场景/动作/视觉关键词）
+7. 议题分析（核心议题、背景、热度、需求、转化）
+8. 颜材预测（适合脚本类型、传播潜力、爆款可能性）
+9. 创作建议（推荐脚本/钩子类型、关键要点）
 
-### Video Analysis Decision Logic
+### 视频分析决策逻辑
 
-For video-shot-breakdown and video-fashion-placement-analyzer:
+对于 video-shot-breakdown 和 video-fashion-placement-analyzer：
 
-| Condition | Method | Reason |
-|-----------|--------|--------|
-| Duration ≤ 2min & Size ≤ 100MB | Direct video analysis | Captures camera movement, transitions, audio sync |
-| Duration > 2min or Size > 100MB | Keyframe extraction | Avoids model limits |
+| 条件 | 方法 | 原因 |
+|------|------|------|
+| 时长 ≤ 2分钟 & 大小 ≤ 100MB | 直接视频分析 | 捕捉镜头运动、转场、音画同步 |
+| 时长 > 2分钟 或 大小 > 100MB | 关键帧提取 | 避免超出模型限制 |
 
-## Skill Dependencies
+## Skill 依赖
 
-| Skill | Required Tools |
-|-------|---------------|
+| Skill | 必需工具 |
+|-------|----------|
 | video-shot-breakdown | ffmpeg |
 | video-fashion-placement-analyzer | ffmpeg, Python 3.6+ |
 | music-matcher | librosa, numpy, scipy |
 | script-to-video | python-docx, pdfplumber |
 
-## Output Formats
+## 输出格式
 
-Most skills output structured data in two formats:
-1. **Markdown**: Human-readable reports and scripts
-2. **JSON**: Machine-parsable structured output (defined in each SKILL.md)
+大多数 Skill 输出两种格式的结构化数据：
+1. **Markdown**: 人类可读的报告和脚本
+2. **JSON**: 机器可解析的结构化输出（在各 SKILL.md 中定义）
 
-The JSON output format for video-shot-breakdown and script-to-video is particularly detailed and should be followed exactly as specified in their respective SKILL.md files.
+video-shot-breakdown 和 script-to-video 的 JSON 输出格式特别详细，应严格遵循各自 SKILL.md 中的规定。
