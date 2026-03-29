@@ -41,7 +41,7 @@ description 字段应包含：
 
 | 分类 | Skills |
 |------|--------|
-| 短视频创作 | hot-script-generator, hot-spot-analyzer, character-fashion-analyzer, script-creator, video-shot-breakdown |
+| 短视频创作 | hot-script-generator, hot-spot-analyzer, character-fashion-analyzer, script-creator, video-shot-breakdown, shot-script-rewriter |
 | 服饰/时尚 | clothing-analyzer, outfit-character-generator, video-fashion-placement-analyzer |
 | AI 视频 | script-to-video |
 | 工具类 | music-matcher, github-repo-search |
