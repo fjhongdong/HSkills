@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
 """
-视频关键帧提取工具
-用于从视频中提取关键帧图片，支持基础间隔、场景变化检测和混合模式
+视频处理工具
+支持视频截取（截取前N秒）和关键帧提取，用于短视频分镜拆解。
 
 使用方法:
+    # 截取视频前120秒（无损）
+    python extract_frames.py video.mp4 --trim
+
+    # 截取前60秒
+    python extract_frames.py video.mp4 --trim --trim-duration 60
+
+    # 截取并输出JSON
+    python extract_frames.py video.mp4 --trim --output-json
+
+    # 关键帧提取（混合模式，默认）
     python extract_frames.py video.mp4
-    python extract_frames.py video.mp4 output_frames/
-    python extract_frames.py video.mp4 --mode hybrid
-    python extract_frames.py video.mp4 --mode scene --threshold 0.2
+
+    # 关键帧提取 + 自适应阈值
     python extract_frames.py video.mp4 --mode hybrid --adaptive
 
 依赖:
@@ -24,8 +33,21 @@ import sys
 from pathlib import Path
 
 
+def format_duration(seconds):
+    """将秒数格式化为 HH:MM:SS"""
+    h = int(seconds // 3600)
+    m = int((seconds % 3600) // 60)
+    s = int(seconds % 60)
+    if h > 0:
+        return f"{h:02d}:{m:02d}:{s:02d}"
+    return f"{m:02d}:{s:02d}"
+
+
 def get_video_info(video_path):
-    """获取视频基本信息"""
+    """获取视频完整技术参数，用于1:1复刻。
+
+    返回视频流、音频流、容器的所有关键技术规格。
+    """
     cmd = [
         'ffprobe',
         '-v', 'quiet',
@@ -39,17 +61,20 @@ def get_video_info(video_path):
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         info = json.loads(result.stdout)
 
-        # 查找视频流
+        # 查找视频流和音频流
         video_stream = None
+        audio_stream = None
         for stream in info.get('streams', []):
-            if stream.get('codec_type') == 'video':
+            if stream.get('codec_type') == 'video' and video_stream is None:
                 video_stream = stream
-                break
+            elif stream.get('codec_type') == 'audio' and audio_stream is None:
+                audio_stream = stream
 
         if not video_stream:
             return None
 
-        duration = float(info.get('format', {}).get('duration', 0))
+        fmt = info.get('format', {})
+        duration = float(fmt.get('duration', 0))
         width = int(video_stream.get('width', 0))
         height = int(video_stream.get('height', 0))
         fps_str = video_stream.get('r_frame_rate', '30/1')
@@ -61,15 +86,87 @@ def get_video_info(video_path):
         else:
             fps = float(fps_str)
 
-        file_size = float(info.get('format', {}).get('size', 0))
+        file_size = float(fmt.get('size', 0))
+        total_frames = int(video_stream.get('nb_frames', 0))
+        if total_frames == 0 and duration > 0 and fps > 0:
+            total_frames = int(duration * fps)
+
+        # 计算宽高比
+        dar = video_stream.get('display_aspect_ratio')
+        if dar and dar != '0:0' and dar != 'N/A':
+            aspect_ratio = dar
+        else:
+            from math import gcd
+            g = gcd(width, height)
+            aspect_ratio = f"{width // g}:{height // g}" if g > 0 else f"{width}:{height}"
+
+        # 旋转信息
+        rotation = 0
+        for tag_key in ['rotation', 'rotate']:
+            for source in [video_stream.get('tags', {}), video_stream.get('side_data_list', [])]:
+                if isinstance(source, dict) and tag_key in source:
+                    rotation = int(source[tag_key])
+                    break
+        # 检查 displaymatrix (新版本 ffmpeg)
+        if rotation == 0:
+            for sd in video_stream.get('side_data_list', []):
+                if sd.get('side_data_type') == 'Display Matrix':
+                    rot = sd.get('rotation')
+                    if rot is not None:
+                        rotation = int(rot)
+
+        video_info = {
+            'codec': video_stream.get('codec_name', 'unknown'),
+            'codec_long': video_stream.get('codec_long_name', ''),
+            'profile': video_stream.get('profile', ''),
+            'level': video_stream.get('level'),
+            'pixel_format': video_stream.get('pix_fmt', ''),
+            'bit_depth': int(video_stream.get('bits_per_raw_sample', 0)) or None,
+            'color_space': video_stream.get('color_space', ''),
+            'color_primaries': video_stream.get('color_primaries', ''),
+            'color_transfer': video_stream.get('color_transfer', ''),
+            'bitrate_kbps': round(int(video_stream.get('bit_rate', 0)) / 1000) if video_stream.get('bit_rate') else None,
+        }
+
+        audio_info = None
+        if audio_stream:
+            channel_layout = audio_stream.get('channel_layout', '')
+            if not channel_layout:
+                ch_count = int(audio_stream.get('channels', 0))
+                channel_map = {1: 'mono', 2: 'stereo', 6: '5.1', 8: '7.1'}
+                channel_layout = channel_map.get(ch_count, f"{ch_count} channels")
+
+            audio_info = {
+                'codec': audio_stream.get('codec_name', 'unknown'),
+                'codec_long': audio_stream.get('codec_long_name', ''),
+                'sample_rate': int(audio_stream.get('sample_rate', 0)),
+                'channels': int(audio_stream.get('channels', 0)),
+                'channel_layout': channel_layout,
+                'bitrate_kbps': round(int(audio_stream.get('bit_rate', 0)) / 1000) if audio_stream.get('bit_rate') else None,
+            }
+
+        container_info = {
+            'format_name': fmt.get('format_name', ''),
+            'format_long_name': fmt.get('format_long_name', ''),
+            'overall_bitrate_kbps': round(int(fmt.get('bit_rate', 0)) / 1000) if fmt.get('bit_rate') else None,
+        }
 
         return {
-            'duration': duration,
+            'file_path': video_path,
+            'duration': round(duration, 3),
+            'duration_formatted': format_duration(duration),
             'width': width,
             'height': height,
-            'fps': fps,
             'resolution': f"{width}x{height}",
-            'file_size_mb': round(file_size / (1024 * 1024), 2)
+            'aspect_ratio': aspect_ratio,
+            'fps': round(fps, 3),
+            'total_frames': total_frames,
+            'rotation': rotation,
+            'file_size_bytes': int(file_size),
+            'file_size_mb': round(file_size / (1024 * 1024), 2),
+            'video': video_info,
+            'audio': audio_info,
+            'container': container_info,
         }
 
     except subprocess.CalledProcessError as e:
@@ -78,6 +175,101 @@ def get_video_info(video_path):
     except json.JSONDecodeError as e:
         print(f"Error parsing video info: {e}")
         return None
+
+
+def trim_video(video_path, output_path, trim_duration=120):
+    """截取视频前N秒，使用流复制（无损，不重新编码）。
+
+    Args:
+        video_path: 原始视频路径
+        output_path: 截取后输出路径
+        trim_duration: 截取时长（秒），默认120秒
+
+    Returns:
+        dict with trim result, or None on failure
+    """
+    original_info = get_video_info(video_path)
+    if not original_info:
+        print("Error: Failed to get video info for trimming")
+        return None
+
+    original_duration = original_info['duration']
+
+    # 如果视频不超过截取时长，无需截取
+    if original_duration <= trim_duration:
+        print(f"[trim] Video duration ({original_duration:.1f}s) <= {trim_duration}s, no trimming needed")
+        return {
+            'trimmed': False,
+            'trim_duration_limit': trim_duration,
+            'original': original_info,
+            'trimmed': None,
+            'trim_note': None
+        }
+
+    cmd = [
+        'ffmpeg',
+        '-i', video_path,
+        '-t', str(trim_duration),
+        '-c', 'copy',
+        '-y',
+        output_path
+    ]
+
+    print(f"[trim] Trimming video: {original_duration:.1f}s → {trim_duration}s (first {trim_duration}s)")
+    print(f"[trim] Output: {output_path}")
+
+    try:
+        subprocess.run(cmd, capture_output=True, text=True, check=True)
+
+        # 获取截取后视频的完整信息
+        trimmed_info = get_video_info(output_path)
+        if not trimmed_info:
+            print("Warning: Could not verify trimmed video, but file was created")
+            return None
+
+        actual_duration = trimmed_info['duration']
+        print(f"[trim] Success: trimmed to {actual_duration:.1f}s")
+
+        return {
+            'trimmed': True,
+            'trim_duration_limit': trim_duration,
+            'original': original_info,
+            'trimmed_video': trimmed_info,
+            'trim_note': f"原始视频 {format_duration(original_duration)}，已截取前 {format_duration(actual_duration)} 进行分析"
+        }
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error trimming video: {e}")
+        print(f"ffmpeg stderr: {e.stderr if e.stderr else 'N/A'}")
+
+        # 尝试降级：不使用 -c copy，而是重新编码
+        print("[trim] Retrying with re-encoding...")
+        fallback_cmd = [
+            'ffmpeg',
+            '-i', video_path,
+            '-t', str(trim_duration),
+            '-y',
+            output_path
+        ]
+        try:
+            subprocess.run(fallback_cmd, capture_output=True, text=True, check=True)
+            trimmed_info = get_video_info(output_path)
+            if not trimmed_info:
+                return None
+
+            actual_duration = trimmed_info['duration']
+            print(f"[trim] Fallback success: trimmed to {actual_duration:.1f}s (re-encoded)")
+
+            return {
+                'trimmed': True,
+                'trim_duration_limit': trim_duration,
+                'original': original_info,
+                'trimmed_video': trimmed_info,
+                'trim_note': f"原始视频 {format_duration(original_duration)}，已截取前 {format_duration(actual_duration)} 进行分析（重新编码）"
+            }
+        except subprocess.CalledProcessError as e2:
+            print(f"Error: Fallback trimming also failed: {e2}")
+            return None
 
 
 def calculate_extraction_params(duration):
@@ -147,7 +339,6 @@ def extract_frames_basic(video_path, output_dir, interval=None, max_frames=None)
 
     output_pattern = os.path.join(output_dir, 'basic_%04d.jpg')
 
-    # 使用 show_entries 帧信息来获取时间码
     cmd = [
         'ffmpeg',
         '-i', video_path,
@@ -241,7 +432,6 @@ def extract_frames_scene(video_path, output_dir, threshold=0.3, max_frames=40):
         frames = sorted([f for f in os.listdir(output_dir) if f.startswith('scene_') and f.endswith('.jpg')])
 
         # 从 ffmpeg stderr 解析 showinfo 获取精确时间码
-        # showinfo 输出格式: [Parsed_showinfo_1 ...] n:0 pts:90 ... pts_time:3.000000
         timestamp_map = {}
         showinfo_pattern = re.compile(r'n:(\d+).*?pts_time:([\d.]+)')
         for line in proc.stderr.split('\n'):
@@ -294,7 +484,7 @@ def analyze_scene_complexity(video_path, video_info):
     需要更高阈值过滤噪声；比值越低说明变化稀疏，需要更低阈值捕捉细节。
     """
     duration = video_info['duration']
-    estimated_shots = max(3, int(duration / 4))  # 粗估镜头数（假设平均4秒一个镜头）
+    estimated_shots = max(3, int(duration / 4))
 
     cmd = [
         'ffmpeg', '-i', video_path,
@@ -306,7 +496,6 @@ def analyze_scene_complexity(video_path, video_info):
     try:
         proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
 
-        # 从 showinfo 输出统计检测到的场景变化帧数
         showinfo_pattern = re.compile(r'n:(\d+).*?pts_time:([\d.]+)')
         detected_count = 0
         for line in proc.stderr.split('\n'):
@@ -316,16 +505,16 @@ def analyze_scene_complexity(video_path, video_info):
         ratio = detected_count / max(estimated_shots, 1)
 
         if ratio <= 1.0:
-            return 0.15  # 变化稀疏，降低阈值以捕捉细微转场
+            return 0.15
         elif ratio <= 2.5:
-            return 0.2   # 变化适中偏低
+            return 0.2
         elif ratio <= 5.0:
-            return 0.3   # 正常范围，使用默认阈值
+            return 0.3
         else:
-            return 0.4   # 变化密集（快剪/晃动），提高阈值过滤噪声
+            return 0.4
 
     except Exception:
-        return 0.3  # 分析失败，回退默认值
+        return 0.3
 
 
 def extract_frames_hybrid(video_path, output_dir, max_frames=40, adaptive=False, threshold=0.3):
@@ -420,22 +609,18 @@ def extract_frames_hybrid(video_path, output_dir, max_frames=40, adaptive=False,
             })
 
         # --- 合并去重 ---
-        # merge_tolerance: 时间差低于此值的帧视为重复
         merge_tolerance = min(interval * 0.6, 1.0)
 
-        # 按时间码排序所有帧
         all_frames = []
         all_frames.extend(basic_data)
         all_frames.extend(scene_data)
         all_frames.sort(key=lambda x: x['timestamp'])
 
-        # 去重：当 interval 帧和 scene 帧时间接近时，保留 scene 帧（更精准）
         merged = []
         for frame in all_frames:
             is_dup = False
             for existing in merged:
                 if abs(frame['timestamp'] - existing['timestamp']) < merge_tolerance:
-                    # 两者接近，优先保留 scene_change 帧
                     if frame['source'] == 'scene_change' and existing['source'] == 'interval':
                         merged.remove(existing)
                         merged.append(frame)
@@ -449,17 +634,14 @@ def extract_frames_hybrid(video_path, output_dir, max_frames=40, adaptive=False,
         # 应用 max_frames 限制
         truncated = False
         if len(merged) > max_frames:
-            # 优先保留 scene_change 帧，均匀间隔帧按均匀间隔保留
             scene_frames_merged = [f for f in merged if f['source'] == 'scene_change']
             interval_frames_merged = [f for f in merged if f['source'] == 'interval']
 
             if len(scene_frames_merged) >= max_frames:
-                # 场景变化帧已够，均匀采样取 max_frames
                 step = len(scene_frames_merged) / max_frames
                 selected_indices = [int(i * step) for i in range(max_frames)]
                 final_frames = [scene_frames_merged[i] for i in selected_indices]
             else:
-                # 混合：全部场景变化帧 + 部分均匀间隔帧
                 remaining = max_frames - len(scene_frames_merged)
                 if remaining < len(interval_frames_merged):
                     step = len(interval_frames_merged) / remaining
@@ -518,24 +700,39 @@ def extract_frames_hybrid(video_path, output_dir, max_frames=40, adaptive=False,
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Extract key frames from video',
+        description='Video processing tool: trim and extract key frames',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
+    # Trim video to first 2 minutes (lossless)
+    python extract_frames.py video.mp4 --trim
+
+    # Trim to first 60 seconds
+    python extract_frames.py video.mp4 --trim --trim-duration 60
+
+    # Trim and output as JSON
+    python extract_frames.py video.mp4 --trim --output-json
+
+    # Extract key frames (hybrid mode, default)
     python extract_frames.py video.mp4
-    python extract_frames.py video.mp4 output_frames/
-    python extract_frames.py video.mp4 --mode hybrid
-    python extract_frames.py video.mp4 --mode scene --threshold 0.2
+
+    # Extract key frames with adaptive threshold
     python extract_frames.py video.mp4 --mode hybrid --adaptive
-    python extract_frames.py video.mp4 --output-json
+
+    # Extract key frames from a specific output dir
+    python extract_frames.py video.mp4 output_frames/
         """
     )
 
     parser.add_argument('video_path', help='Path to the video file')
-    parser.add_argument('output_dir', nargs='?', default=None,
-                        help='Output directory for frames (default: frames_<video_name>/)')
+    parser.add_argument('output_path', nargs='?', default=None,
+                        help='Output path: trimmed video file (--trim) or frame output directory (default: auto-generated)')
+    parser.add_argument('--trim', action='store_true',
+                        help='Trim video to first N seconds (default: 120s)')
+    parser.add_argument('--trim-duration', type=int, default=120,
+                        help='Trim duration in seconds (default: 120)')
     parser.add_argument('--mode', choices=['basic', 'scene', 'hybrid'], default='hybrid',
-                        help='Extraction mode: basic (interval), scene (scene change), hybrid (recommended, both)')
+                        help='Frame extraction mode (ignored with --trim)')
     parser.add_argument('--interval', type=float, default=None,
                         help='Frame extraction interval in seconds (basic/hybrid mode)')
     parser.add_argument('--max-frames', type=int, default=None,
@@ -554,64 +751,115 @@ Examples:
         print(f"Error: Video file not found: {args.video_path}")
         sys.exit(1)
 
-    # 设置输出目录
-    if args.output_dir is None:
-        video_name = Path(args.video_path).stem
-        args.output_dir = f"frames_{video_name}"
+    # --- 截取模式 ---
+    if args.trim:
+        if args.output_path is None:
+            video_name = Path(args.video_path).stem
+            ext = Path(args.video_path).suffix
+            args.output_path = f"{video_name}_trimmed{ext}"
 
-    # 计算默认 max_frames
-    if args.max_frames is None:
-        video_info = get_video_info(args.video_path)
-        if video_info:
-            _, args.max_frames = calculate_extraction_params(video_info['duration'])
+        result = trim_video(args.video_path, args.output_path, args.trim_duration)
+
+        if result:
+            if args.output_json:
+                print(json.dumps(result, indent=2, ensure_ascii=False))
+            else:
+                if result['trimmed']:
+                    orig = result['original']
+                    trim_vid = result['trimmed_video']
+                    print(f"\n{'='*60}")
+                    print(f"  Trim Complete")
+                    print(f"{'='*60}")
+                    print(f"  Original:  {orig['duration_formatted']} ({orig['duration']:.1f}s)")
+                    print(f"  Trimmed:   {trim_vid['duration_formatted']} ({trim_vid['duration']:.1f}s)")
+                    print(f"  Output:    {trim_vid['file_path']}")
+                    print(f"{'─'*60}")
+                    print(f"  Video:     {orig['resolution']} @ {orig['fps']:.1f}fps, {orig['video']['codec']}")
+                    if orig['video'].get('bitrate_kbps'):
+                        print(f"  Bitrate:   {orig['video']['bitrate_kbps']} kbps")
+                    if orig.get('audio'):
+                        print(f"  Audio:     {orig['audio']['codec']} {orig['audio']['sample_rate']}Hz {orig['audio']['channel_layout']}")
+                    print(f"  Size:      {trim_vid['file_size_mb']} MB")
+                    print(f"{'='*60}")
+                else:
+                    orig = result['original']
+                    print(f"\nNo trimming needed (video is {orig['duration_formatted']})")
+                    print(f"  Resolution: {orig['resolution']}, FPS: {orig['fps']}, Codec: {orig['video']['codec']}")
         else:
-            args.max_frames = 30
+            print("Trim failed")
+            sys.exit(1)
 
-    # 根据模式提取关键帧
-    if args.mode == 'basic':
-        result = extract_frames_basic(
-            args.video_path,
-            args.output_dir,
-            interval=args.interval,
-            max_frames=args.max_frames
-        )
-    elif args.mode == 'scene':
-        result = extract_frames_scene(
-            args.video_path,
-            args.output_dir,
-            threshold=args.threshold,
-            max_frames=args.max_frames
-        )
-    else:  # hybrid
-        result = extract_frames_hybrid(
-            args.video_path,
-            args.output_dir,
-            max_frames=args.max_frames,
-            adaptive=args.adaptive,
-            threshold=args.threshold
-        )
-
-    if result:
-        if args.output_json:
-            print(json.dumps(result, indent=2, ensure_ascii=False))
-        else:
-            params = result['extraction_params']
-            print(f"\nExtraction complete!")
-            print(f"  - Mode: {params['mode']}")
-            print(f"  - Frames extracted: {params['actual_frames']}")
-            if params.get('stats'):
-                stats = params['stats']
-                print(f"  - Interval frames: {stats['interval_frames']}")
-                print(f"  - Scene frames: {stats['scene_frames']}")
-                print(f"  - Duplicates removed: {stats['duplicates_removed']}")
-            print(f"  - Output directory: {result['output_dir']}")
-            print(f"  - Video duration: {result['video_info']['duration']:.1f}s")
-            print(f"  - Resolution: {result['video_info']['resolution']}")
-            if params.get('truncated'):
-                print(f"  ⚠ Some frames were truncated (max_frames={params['max_frames']})")
+    # --- 关键帧提取模式 ---
     else:
-        print("Frame extraction failed")
-        sys.exit(1)
+        if args.output_path is None:
+            video_name = Path(args.video_path).stem
+            args.output_path = f"frames_{video_name}"
+
+        # 计算默认 max_frames
+        if args.max_frames is None:
+            video_info = get_video_info(args.video_path)
+            if video_info:
+                _, args.max_frames = calculate_extraction_params(video_info['duration'])
+            else:
+                args.max_frames = 30
+
+        if args.mode == 'basic':
+            result = extract_frames_basic(
+                args.video_path,
+                args.output_path,
+                interval=args.interval,
+                max_frames=args.max_frames
+            )
+        elif args.mode == 'scene':
+            result = extract_frames_scene(
+                args.video_path,
+                args.output_path,
+                threshold=args.threshold,
+                max_frames=args.max_frames
+            )
+        else:  # hybrid
+            result = extract_frames_hybrid(
+                args.video_path,
+                args.output_path,
+                max_frames=args.max_frames,
+                adaptive=args.adaptive,
+                threshold=args.threshold
+            )
+
+        if result:
+            if args.output_json:
+                print(json.dumps(result, indent=2, ensure_ascii=False))
+            else:
+                vi = result['video_info']
+                params = result['extraction_params']
+                print(f"\n{'='*60}")
+                print(f"  Extraction Complete")
+                print(f"{'='*60}")
+                print(f"  Mode:       {params['mode']}")
+                print(f"  Frames:     {params['actual_frames']} extracted")
+                if params.get('stats'):
+                    stats = params['stats']
+                    print(f"  Stats:      {stats['interval_frames']} interval + {stats['scene_frames']} scene → {stats['merged_frames']} merged ({stats['duplicates_removed']} duplicates removed)")
+                print(f"{'─'*60}")
+                print(f"  Duration:   {vi['duration_formatted']} ({vi['duration']:.1f}s)")
+                print(f"  Resolution: {vi['resolution']} ({vi['aspect_ratio']})")
+                print(f"  FPS:        {vi['fps']}")
+                print(f"  Frames:     {vi['total_frames']} total")
+                print(f"  Video:      {vi['video']['codec']}", end='')
+                if vi['video'].get('profile'):
+                    print(f" ({vi['video']['profile']})", end='')
+                print()
+                if vi.get('audio'):
+                    print(f"  Audio:      {vi['audio']['codec']} {vi['audio']['sample_rate']}Hz {vi['audio']['channel_layout']}")
+                print(f"  Size:       {vi['file_size_mb']} MB")
+                print(f"{'─'*60}")
+                print(f"  Output:     {result['output_dir']}")
+                if params.get('truncated'):
+                    print(f"  ⚠ Truncated at max_frames={params['max_frames']}")
+                print(f"{'='*60}")
+        else:
+            print("Frame extraction failed")
+            sys.exit(1)
 
 
 if __name__ == '__main__':
