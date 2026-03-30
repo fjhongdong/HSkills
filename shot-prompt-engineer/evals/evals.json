@@ -1,0 +1,19 @@
+{
+  "skill_name": "shot-prompt-engineer",
+  "evals": [
+    {
+      "id": 1,
+      "name": "cure-2shots",
+      "prompt": "我有一个分镜JSON数据，请帮我生成AI视频提示词。这是日系治愈风格的2镜头短片，分镜数据如下：\n\n请读取 shot_input.json 文件作为分镜输入数据。\n\n角色参考图描述：25岁东亚女性，鹅蛋脸，五官柔和，杏眼微微上翘，自然双眼皮，鼻梁挺直，嘴唇自然粉色，暖白肤色，黑色长直发过肩自然垂落，身材纤细，气质温柔文艺。\n\n请为每个镜头生成关键帧图生图提示词和视频图生视频提示词，输出JSON格式。",
+      "expected_output": "JSON格式的提示词包，包含 character_anchor、每个镜头的 keyframe_prompt（英文）和 video_prompt（英文），以及中文版本。关键帧prompt应包含完整的角色锚点描述，视频prompt应只描述动态不重复静态信息。",
+      "files": ["shot_input.json"]
+    },
+    {
+      "id": 2,
+      "name": "urban-5shots",
+      "prompt": "帮我把这个赛博朋克风格的5镜头分镜数据转成AI视频提示词。\n\n请读取 shot_input.json 文件作为分镜输入数据。\n\n角色参考图描述：22岁东亚男性，棱角分明的脸型，浓眉单眼皮，鼻梁高挺，薄唇，小麦色健康肤色，短发利落黑色，身材匀称偏瘦，气质酷飒冷感。\n\n生成完整的提示词JSON包。",
+      "expected_output": "JSON格式提示词包，5个镜头各有关键帧和视频prompt。赛博朋克风格的关键帧prompt应精确描述霓虹光影效果，视频prompt应包含运镜、动作时间序列和环境动态。最后一个镜头（玄关）应呈现从冷调到暖调的色温转变。",
+      "files": ["shot_input.json"]
+    }
+  ]
+}
