@@ -1,31 +1,26 @@
 ---
 name: shot-script-rewriter
-description: 接收 video-shot-breakdown 的分镜脚本 JSON 和用户文字描述的角色形象，对分镜脚本进行最小化角色替换改写。当用户提供分镜JSON并要求"改写分镜"、"换角色"、"角色替换"、"复刻脚本"、"替换人物"、"改写分镜脚本"、"角色改编"、"换个角色复刻"、"用我的角色重写分镜"时触发此技能。即使没有明确提及改写，只要用户同时提供了 video-shot-breakdown 的输出 JSON 和角色描述，也应触发此技能。
+description: 接收分镜脚本 JSON 和用户文字描述的角色形象，对分镜脚本进行最小化角色替换改写。当用户提供分镜JSON并要求"改写分镜"、"换角色"、"角色替换"、"复刻脚本"、"替换人物"、"改写分镜脚本"、"角色改编"、"换个角色复刻"、"用我的角色重写分镜"时触发此技能。即使没有明确提及改写，只要用户同时提供了分镜脚本 JSON 和角色描述，也应触发此技能。
 ---
 
 # 分镜脚本角色改写器
 
-接收 video-shot-breakdown 的分镜脚本，根据用户描述的新角色形象进行最小化改写——仅替换角色直接相关内容，尽可能保留原脚本的故事线、情绪氛围和技术参数。
+接收分镜脚本 JSON，根据用户描述的新角色形象进行最小化改写——仅替换角色直接相关内容，尽可能保留原脚本的故事线、情绪氛围和技术参数。
 
 ## 核心能力
 
-- 接收 video-shot-breakdown 的完整 JSON 输出
+- 接收完整的分镜脚本 JSON
 - 接收用户文字描述的新角色形象
 - 按三级策略（必改/适配改/不动）进行最小化改写
-- 输出与输入格式完全相同的 JSON，下游工具零适配
-
-## 与 video-shot-breakdown 的区分
-
-- 当用户已提供 video-shot-breakdown 的输出 JSON 并要求改写角色时 → 触发本 Skill
-- 当用户只上传视频还未拆解时 → 先触发 video-shot-breakdown 完成拆解
+- 输出与输入格式完全相同的 JSON
 
 ## 输入输出
 
 **输入：**
-1. video-shot-breakdown 的完整 JSON 输出（必需）
+1. 分镜脚本 JSON（必需）
 2. 用户文字描述的角色形象（必需）
 
-**输出：** 与 video-shot-breakdown 完全相同的 JSON 格式，不增不减字段
+**输出：** 与输入格式完全相同的 JSON
 
 ---
 
@@ -79,12 +74,12 @@ description: 接收 video-shot-breakdown 的分镜脚本 JSON 和用户文字描
 
 ### JSON 输入
 
-必须包含 video-shot-breakdown 输出的完整结构，至少包含以下三个顶层字段：
+必须包含完整的分镜脚本结构，至少包含以下三个顶层字段：
 - `video_info`：视频基本信息
 - `video_analysis`：视频分析结果
 - `shot_breakdown`：分镜数组
 
-如果输入 JSON 缺少以上任一字段，提示用户确认 JSON 来源是否为 video-shot-breakdown。
+如果输入 JSON 缺少以上任一字段，提示用户确认 JSON 格式是否正确。
 
 ### 角色描述
 
@@ -105,7 +100,7 @@ description: 接收 video-shot-breakdown 的分镜脚本 JSON 和用户文字描
 
 ### 步骤1：验证输入
 
-检查输入 JSON 是否符合 video-shot-breakdown 格式：
+检查输入 JSON 是否符合分镜脚本格式：
 - 必须包含 `video_info`、`video_analysis`、`shot_breakdown` 三个顶层字段
 - `shot_breakdown` 必须是非空数组
 - 如果 `has_real_person` 为 `false` 且无 `subjects[].type: "人物"`，提示用户无法进行角色替换改写
@@ -154,7 +149,7 @@ description: 接收 video-shot-breakdown 的分镜脚本 JSON 和用户文字描
 | 错误情况 | 处理方式 |
 |----------|----------|
 | 输入 JSON 格式错误 | 提示用户检查 JSON 格式，提供具体解析错误位置 |
-| JSON 缺少必需字段 | 提示用户确认 JSON 来源为 video-shot-breakdown，列出缺失字段 |
+| JSON 缺少必需字段 | 提示用户确认 JSON 格式，列出缺失字段 |
 | 角色描述过短（<10字） | 提示用户补充性别、年龄段、气质风格等信息 |
 | 原视频无人物出镜 | 提示无法进行角色替换改写 |
 
@@ -165,7 +160,7 @@ description: 接收 video-shot-breakdown 的分镜脚本 JSON 和用户文字描
 1. **最小干预是第一原则**：能不改就不改。宁可保留一些不那么完美的地方，也不要过度改写导致偏离原脚本
 2. **保持故事线完整**：改写后的脚本必须讲述同一个故事，只是主角换了
 3. **保持情绪一致**：原脚本是治愈风，改写后也应该是治愈风，只是通过新角色来表达
-4. **格式严格兼容**：输出 JSON 必须与 video-shot-breakdown 格式完全一致，确保下游工具（如 script-to-video）可直接使用
+4. **格式严格兼容**：输出 JSON 必须与输入格式完全一致
 5. **不要凭空创造**：原始 JSON 中为 `null` 的字段（如 `dialogue: null`）改写后保持 `null`
 6. **物体类 subjects 不替换**：`subjects[].type: "物体"` 的条目保持原样
 7. **质量自检**：改写完成后，检查每个镜头是否仍有"出戏感"——如果有，说明改写不够彻底或改错了
@@ -176,7 +171,7 @@ description: 接收 video-shot-breakdown 的分镜脚本 JSON 和用户文字描
 
 **用户角色描述：** "22岁男生，酷飒街头风，穿着黑色oversized卫衣和工装裤，性格外向开朗"
 
-### 原始镜头（video-shot-breakdown 输出）
+### 原始镜头（分镜脚本示例）
 
 ```json
 {
