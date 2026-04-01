@@ -187,6 +187,12 @@
 
 ```json
 {
+  "video_info": {
+    "title": "视频标题",
+    "duration_seconds": 30.0,
+    "source": "来源说明（如：用户上传/抖音链接等）",
+    "analysis_date": "分析日期"
+  },
   "video_analysis": {
     "title": "视频标题",
     "theme": "视频主题",
@@ -417,7 +423,38 @@
 
 ## 七、输出示例
 
-以下是单镜头输出示例，供参考字段填充方式：
+以下是完整输出结构示例：
+
+```json
+{
+  "video_info": {
+    "title": "独居治愈时光",
+    "duration_seconds": 8.0,
+    "source": "用户上传",
+    "analysis_date": "2026-03-30"
+  },
+  "video_analysis": {
+    "title": "独居治愈时光",
+    "theme": "独居生活的治愈瞬间",
+    "summary": "一个女生在阳光洒落的窗边安静看书，享受独居生活的惬意时光。",
+    "emotion": {
+      "primary": "治愈",
+      "secondary": ["温暖", "平静"],
+      "emotion_arc": "平静→沉浸→满足"
+    },
+    "video_type": "情感治愈",
+    "video_style": "日系清新",
+    "target_audience": "20-30岁女性，喜欢独居生活内容",
+    "key_elements": ["阳光", "窗边", "书籍", "慵懒穿搭"],
+    "on_screen_presence": {...},
+    "fashion_placement": {...}
+  },
+  "shot_breakdown": [...],
+  "editing_analysis": {...}
+}
+```
+
+以下是单镜头详细示例，供参考字段填充方式：
 
 ```json
 {
