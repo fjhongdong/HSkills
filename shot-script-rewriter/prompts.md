@@ -220,159 +220,400 @@
 22岁男生，酷飒街头风，穿着黑色oversized卫衣和工装裤，性格外向开朗
 ```
 
-### 输入镜头片段
+### 输入完整 JSON
 
 ```json
 {
-  "shot_id": 1,
-  "timecode": {
-    "start": "00:00:00",
-    "end": "00:00:04",
-    "duration_seconds": 4.0
+  "video_info": {
+    "title": "独居治愈时光",
+    "duration_seconds": 8.0,
+    "source": "用户上传",
+    "analysis_date": "2026-03-30"
   },
-  "shot_type": "中景",
-  "camera_movement": "固定镜头",
-  "transition_in": "淡入",
-  "transition_out": "硬切",
-  "visual": {
-    "scene": {
-      "location_type": "室内",
-      "specific_location": "家中窗边角落",
-      "environment": "阳光透过白色纱帘洒入，窗边有绿植和软垫，整体温馨"
+  "video_analysis": {
+    "title": "独居治愈时光",
+    "theme": "独居生活的治愈瞬间",
+    "summary": "一个女生在阳光洒落的窗边安静看书，享受独居生活的惬意时光。",
+    "emotion": {
+      "primary": "治愈",
+      "secondary": ["温暖", "平静"],
+      "emotion_arc": "平静→沉浸→满足"
     },
-    "lighting": {
-      "type": "自然光",
-      "direction": "左侧逆光",
-      "color_temperature": "暖色调",
-      "mood": "柔和温暖，有光斑"
-    },
-    "color": {
-      "dominant_colors": ["米白色", "浅棕色", "淡绿色"],
-      "color_mood": "温暖治愈",
-      "color_grade": "日系胶片感，低对比度"
+    "video_type": "情感治愈",
+    "video_style": "日系清新",
+    "target_audience": "20-30岁女性，喜欢独居生活内容",
+    "key_elements": ["阳光", "窗边", "书籍", "慵懒穿搭"],
+    "on_screen_presence": {
+      "has_real_person": true,
+      "person_count": 1,
+      "person_details": [
+        {
+          "person_id": 1,
+          "description": "年轻女性，约25岁，气质温柔文艺",
+          "screen_time_ratio": 1.0,
+          "appearance_notes": "全程出镜"
+        }
+      ],
+      "exposure_level": "高"
     }
   },
-  "subjects": [
+  "shot_breakdown": [
     {
-      "subject_id": 1,
-      "type": "人物",
-      "description": "年轻女性，约25岁，气质温柔文艺",
-      "position": "蜷坐在窗边软垫上",
-      "action": "专注看书，偶尔翻页",
-      "expression": "平静专注，嘴角微微上扬",
-      "clothing": {
-        "top": "米色慵懒风卫衣，宽松版型",
-        "bottom": "灰色休闲裤",
-        "accessories": "无",
-        "overall_style": "慵懒家居风"
+      "shot_id": 1,
+      "timecode": {
+        "start": "00:00:00",
+        "end": "00:00:04",
+        "duration_seconds": 4.0
       },
-      "props": ["书籍"]
-    }
-  ],
-  "audio": {
-    "dialogue": null,
-    "narration": {
-      "content": "这样的午后，只属于我",
-      "tone": "温柔内心独白"
+      "shot_type": "中景",
+      "camera_movement": "固定镜头",
+      "transition_in": {
+        "type": "淡入",
+        "duration_seconds": 0.5,
+        "color": "黑"
+      },
+      "transition_out": {
+        "type": "硬切",
+        "duration_seconds": 0,
+        "color": null
+      },
+      "visual": {
+        "scene": {
+          "location_type": "室内",
+          "specific_location": "家中窗边角落",
+          "environment": "阳光透过白色纱帘洒入，窗边有绿植和软垫，整体温馨"
+        },
+        "lighting": {
+          "type": "自然光",
+          "direction": "左侧逆光",
+          "color_temperature": "暖色调（约3500K）",
+          "mood": "柔和温暖，有光斑",
+          "shadow": "柔阴影"
+        },
+        "color": {
+          "dominant_colors": ["米白色", "浅棕色", "淡绿色"],
+          "dominant_color_hex": ["#F5F0E8", "#D4C5A9", "#A8C5A0"],
+          "color_mood": "温暖治愈",
+          "color_grade": "日系胶片感，低对比度"
+        }
+      },
+      "subjects": [
+        {
+          "subject_id": 1,
+          "type": "人物",
+          "person_id": 1,
+          "description": "年轻女性，约25岁，气质温柔文艺",
+          "position": "蜷坐在窗边软垫上",
+          "body_angle": "3/4侧面",
+          "eye_line": "低头看向大腿上的书本",
+          "action": "专注看书，偶尔翻页",
+          "movement": "原地微动",
+          "movement_speed": "缓慢",
+          "expression": "平静专注，嘴角微微上扬",
+          "clothing": {
+            "top": "米色慵懒风卫衣，宽松版型",
+            "bottom": "灰色休闲裤",
+            "accessories": "无",
+            "overall_style": "慵懒家居风"
+          },
+          "props": ["书籍"]
+        }
+      ],
+      "audio": {
+        "dialogue": null,
+        "narration": {
+          "content": "这样的午后，只属于我",
+          "tone": "温柔内心独白"
+        },
+        "music": {
+          "presence": true,
+          "style": "轻音乐/钢琴",
+          "mood": "治愈温暖",
+          "tempo": "慢速"
+        }
+      },
+      "shot_description": "女生蜷坐在洒满阳光的窗边，专注地看书，米色卫衣与温暖的光线融为一体"
     },
-    "music": {
-      "presence": true,
-      "style": "轻音乐/钢琴",
-      "mood": "治愈温暖",
-      "tempo": "慢速"
+    {
+      "shot_id": 2,
+      "timecode": {
+        "start": "00:00:04",
+        "end": "00:00:08",
+        "duration_seconds": 4.0
+      },
+      "shot_type": "近景",
+      "camera_movement": "固定镜头",
+      "transition_in": {
+        "type": "硬切",
+        "duration_seconds": 0,
+        "color": null
+      },
+      "transition_out": {
+        "type": "淡出",
+        "duration_seconds": 0.5,
+        "color": "黑"
+      },
+      "visual": {
+        "scene": {
+          "location_type": "室内",
+          "specific_location": "家中窗边角落",
+          "environment": "阳光透过白色纱帘洒入"
+        },
+        "lighting": {
+          "type": "自然光",
+          "direction": "左侧逆光",
+          "color_temperature": "暖色调",
+          "mood": "柔和温暖"
+        },
+        "color": {
+          "dominant_colors": ["米白色", "浅棕色"],
+          "color_mood": "温暖治愈"
+        }
+      },
+      "subjects": [
+        {
+          "subject_id": 1,
+          "type": "人物",
+          "person_id": 1,
+          "description": "年轻女性，约25岁，气质温柔文艺",
+          "position": "蜷坐在窗边软垫上",
+          "action": "合上书本，望向窗外",
+          "expression": "嘴角带着满足的微笑",
+          "clothing": {
+            "top": "米色慵懒风卫衣",
+            "bottom": "灰色休闲裤",
+            "overall_style": "慵懒家居风"
+          }
+        }
+      ],
+      "audio": {
+        "dialogue": null,
+        "narration": null,
+        "music": {
+          "presence": true,
+          "style": "轻音乐/钢琴",
+          "mood": "治愈温暖",
+          "tempo": "慢速"
+        }
+      },
+      "shot_description": "女生合上书本，望向窗外的阳光，脸上带着满足的微笑"
     }
-  },
-  "shot_description": "女生蜷坐在洒满阳光的窗边，专注地看书，米色卫衣与温暖的光线融为一体"
+  ]
 }
 ```
 
-### 输出镜头片段
+### 输出完整 JSON
 
 ```json
 {
-  "shot_id": 1,
-  "timecode": {
-    "start": "00:00:00",
-    "end": "00:00:04",
-    "duration_seconds": 4.0
+  "video_info": {
+    "title": "独居治愈时光",
+    "duration_seconds": 8.0,
+    "source": "用户上传",
+    "analysis_date": "2026-03-30"
   },
-  "shot_type": "中景",
-  "camera_movement": "固定镜头",
-  "transition_in": "淡入",
-  "transition_out": "硬切",
-  "visual": {
-    "scene": {
-      "location_type": "室内",
-      "specific_location": "家中窗边角落",
-      "environment": "阳光透过白色纱帘洒入，窗边有绿植和软垫，整体温馨"
+  "video_analysis": {
+    "title": "独居治愈时光",
+    "theme": "独居生活的治愈瞬间",
+    "summary": "一个男生在阳光洒落的窗边安静看书，享受独居生活的惬意时光。",
+    "emotion": {
+      "primary": "治愈",
+      "secondary": ["温暖", "平静"],
+      "emotion_arc": "平静→沉浸→满足"
     },
-    "lighting": {
-      "type": "自然光",
-      "direction": "左侧逆光",
-      "color_temperature": "暖色调",
-      "mood": "柔和温暖，有光斑"
-    },
-    "color": {
-      "dominant_colors": ["米白色", "浅棕色", "淡绿色"],
-      "color_mood": "温暖治愈",
-      "color_grade": "日系胶片感，低对比度"
+    "video_type": "情感治愈",
+    "video_style": "日系清新",
+    "target_audience": "20-30岁女性，喜欢独居生活内容",
+    "key_elements": ["阳光", "窗边", "书籍", "街头酷飒穿搭"],
+    "on_screen_presence": {
+      "has_real_person": true,
+      "person_count": 1,
+      "person_details": [
+        {
+          "person_id": 1,
+          "description": "22岁男生，酷飒街头风，性格外向开朗",
+          "screen_time_ratio": 1.0,
+          "appearance_notes": "全程出镜"
+        }
+      ],
+      "exposure_level": "高"
     }
   },
-  "subjects": [
+  "shot_breakdown": [
     {
-      "subject_id": 1,
-      "type": "人物",
-      "description": "22岁男生，酷飒街头风，性格外向开朗",
-      "position": "靠坐在窗边",
-      "action": "随手翻着书，时不时望向窗外",
-      "expression": "嘴角带笑，眼神明亮放松",
-      "clothing": {
-        "top": "黑色oversized卫衣",
-        "bottom": "卡其色工装裤",
-        "accessories": "无",
-        "overall_style": "街头酷飒风"
+      "shot_id": 1,
+      "timecode": {
+        "start": "00:00:00",
+        "end": "00:00:04",
+        "duration_seconds": 4.0
       },
-      "props": ["书籍"]
-    }
-  ],
-  "audio": {
-    "dialogue": null,
-    "narration": {
-      "content": "这样的午后，只属于我",
-      "tone": "随性内心独白"
+      "shot_type": "中景",
+      "camera_movement": "固定镜头",
+      "transition_in": {
+        "type": "淡入",
+        "duration_seconds": 0.5,
+        "color": "黑"
+      },
+      "transition_out": {
+        "type": "硬切",
+        "duration_seconds": 0,
+        "color": null
+      },
+      "visual": {
+        "scene": {
+          "location_type": "室内",
+          "specific_location": "家中窗边角落",
+          "environment": "阳光透过白色纱帘洒入，窗边有绿植和软垫，整体温馨"
+        },
+        "lighting": {
+          "type": "自然光",
+          "direction": "左侧逆光",
+          "color_temperature": "暖色调（约3500K）",
+          "mood": "柔和温暖，有光斑",
+          "shadow": "柔阴影"
+        },
+        "color": {
+          "dominant_colors": ["米白色", "浅棕色", "淡绿色"],
+          "dominant_color_hex": ["#F5F0E8", "#D4C5A9", "#A8C5A0"],
+          "color_mood": "温暖治愈",
+          "color_grade": "日系胶片感，低对比度"
+        }
+      },
+      "subjects": [
+        {
+          "subject_id": 1,
+          "type": "人物",
+          "person_id": 1,
+          "description": "22岁男生，酷飒街头风，性格外向开朗",
+          "position": "靠坐在窗边",
+          "body_angle": "3/4侧面",
+          "eye_line": "低头看向大腿上的书本",
+          "action": "随手翻着书，时不时望向窗外",
+          "movement": "原地微动",
+          "movement_speed": "缓慢",
+          "expression": "嘴角带笑，眼神明亮放松",
+          "clothing": {
+            "top": "黑色oversized卫衣",
+            "bottom": "卡其色工装裤",
+            "accessories": "无",
+            "overall_style": "街头酷飒风"
+          },
+          "props": ["书籍"]
+        }
+      ],
+      "audio": {
+        "dialogue": null,
+        "narration": {
+          "content": "这样的午后，只属于我",
+          "tone": "随性内心独白"
+        },
+        "music": {
+          "presence": true,
+          "style": "轻音乐/钢琴",
+          "mood": "治愈温暖",
+          "tempo": "慢速"
+        }
+      },
+      "shot_description": "男生靠坐在洒满阳光的窗边，黑色卫衣与温暖光线形成鲜明对比"
     },
-    "music": {
-      "presence": true,
-      "style": "轻音乐/钢琴",
-      "mood": "治愈温暖",
-      "tempo": "慢速"
+    {
+      "shot_id": 2,
+      "timecode": {
+        "start": "00:00:04",
+        "end": "00:00:08",
+        "duration_seconds": 4.0
+      },
+      "shot_type": "近景",
+      "camera_movement": "固定镜头",
+      "transition_in": {
+        "type": "硬切",
+        "duration_seconds": 0,
+        "color": null
+      },
+      "transition_out": {
+        "type": "淡出",
+        "duration_seconds": 0.5,
+        "color": "黑"
+      },
+      "visual": {
+        "scene": {
+          "location_type": "室内",
+          "specific_location": "家中窗边角落",
+          "environment": "阳光透过白色纱帘洒入"
+        },
+        "lighting": {
+          "type": "自然光",
+          "direction": "左侧逆光",
+          "color_temperature": "暖色调",
+          "mood": "柔和温暖"
+        },
+        "color": {
+          "dominant_colors": ["米白色", "浅棕色"],
+          "color_mood": "温暖治愈"
+        }
+      },
+      "subjects": [
+        {
+          "subject_id": 1,
+          "type": "人物",
+          "person_id": 1,
+          "description": "22岁男生，酷飒街头风，性格外向开朗",
+          "position": "靠坐在窗边",
+          "action": "合上书本，望向窗外",
+          "expression": "嘴角带着满足的微笑",
+          "clothing": {
+            "top": "黑色oversized卫衣",
+            "bottom": "卡其色工装裤",
+            "overall_style": "街头酷飒风"
+          }
+        }
+      ],
+      "audio": {
+        "dialogue": null,
+        "narration": null,
+        "music": {
+          "presence": true,
+          "style": "轻音乐/钢琴",
+          "mood": "治愈温暖",
+          "tempo": "慢速"
+        }
+      },
+      "shot_description": "男生合上书本，望向窗外的阳光，脸上带着满足的微笑"
     }
-  },
-  "shot_description": "男生靠坐在洒满阳光的窗边，黑色卫衣与温暖光线形成鲜明对比"
+  ]
 }
-```
 
 ### 改动清单（可选输出）
 
 | 级别 | 字段 | 原值 | 新值 | 改写原因 |
 |------|------|------|------|----------|
-| 一级 | subjects[0].description | "年轻女性，约25岁，气质温柔文艺" | "22岁男生，酷飒街头风，性格外向开朗" | 角色直接替换 |
-| 一级 | subjects[0].clothing.top | "米色慵懒风卫衣，宽松版型" | "黑色oversized卫衣" | 穿搭直接替换 |
-| 一级 | subjects[0].clothing.bottom | "灰色休闲裤" | "卡其色工装裤" | 穿搭直接替换 |
-| 一级 | subjects[0].clothing.overall_style | "慵懒家居风" | "街头酷飒风" | 穿搭直接替换 |
-| 一级 | subjects[0].expression | "平静专注，嘴角微微上扬" | "嘴角带笑，眼神明亮放松" | 气质调整 |
-| 二级 | subjects[0].position | "蜷坐在窗边软垫上" | "靠坐在窗边" | 体态冲突：蜷坐对成年男性不自然 |
-| 二级 | subjects[0].action | "专注看书，偶尔翻页" | "随手翻着书，时不时望向窗外" | 气质冲突：温柔内向→外向开朗的行为差异 |
-| 二级 | shot_description | "女生蜷坐...米色卫衣..." | "男生靠坐...黑色卫衣..." | 包含原角色性别和服饰，需同步更新 |
-| 二级 | narration.tone | "温柔内心独白" | "随性内心独白" | 气质冲突：温柔→酷飒 |
-| 三级 | timecode | — | 不变 | 时间码不改 |
-| 三级 | shot_type | — | 不变 | 镜头类型不改 |
-| 三级 | camera_movement | — | 不变 | 镜头运动不改 |
-| 三级 | visual.scene | — | 不变 | 场景不改 |
-| 三级 | visual.lighting | — | 不变 | 光线不改 |
-| 三级 | visual.color | — | 不变 | 色彩不改 |
-| 三级 | dialogue | null | null | 保持 null |
-| 三级 | music | — | 不变 | 音乐不改 |
+| 全局 | video_analysis.summary | "...一个女生..." | "...一个男生..." | 概要中提到原角色性别 |
+| 全局 | video_analysis.key_elements | "慵懒穿搭" | "街头酷飒穿搭" | 角色相关元素替换 |
+| 全局 | video_analysis.on_screen_presence.person_details[0].description | "年轻女性，约25岁，气质温柔文艺" | "22岁男生，酷飒街头风，性格外向开朗" | 全局人物描述同步更新 |
+| 一级 | shot_breakdown[0].subjects[0].description | "年轻女性，约25岁，气质温柔文艺" | "22岁男生，酷飒街头风，性格外向开朗" | 角色直接替换 |
+| 一级 | shot_breakdown[0].subjects[0].clothing.top | "米色慵懒风卫衣，宽松版型" | "黑色oversized卫衣" | 穿搭直接替换 |
+| 一级 | shot_breakdown[0].subjects[0].clothing.bottom | "灰色休闲裤" | "卡其色工装裤" | 穿搭直接替换 |
+| 一级 | shot_breakdown[0].subjects[0].clothing.overall_style | "慵懒家居风" | "街头酷飒风" | 穿搭直接替换 |
+| 一级 | shot_breakdown[0].subjects[0].expression | "平静专注，嘴角微微上扬" | "嘴角带笑，眼神明亮放松" | 气质调整 |
+| 一级 | shot_breakdown[1].subjects[0].description | "年轻女性，约25岁，气质温柔文艺" | "22岁男生，酷飒街头风，性格外向开朗" | 角色直接替换 |
+| 一级 | shot_breakdown[1].subjects[0].clothing | 慵懒家居风 | 街头酷飒风 | 穿搭直接替换 |
+| 二级 | shot_breakdown[0].subjects[0].position | "蜷坐在窗边软垫上" | "靠坐在窗边" | 体态冲突：蜷坐对成年男性不自然 |
+| 二级 | shot_breakdown[0].subjects[0].action | "专注看书，偶尔翻页" | "随手翻着书，时不时望向窗外" | 气质冲突：温柔内向→外向开朗的行为差异 |
+| 二级 | shot_breakdown[0].shot_description | "女生蜷坐...米色卫衣..." | "男生靠坐...黑色卫衣..." | 包含原角色性别和服饰，需同步更新 |
+| 二级 | shot_breakdown[0].audio.narration.tone | "温柔内心独白" | "随性内心独白" | 气质冲突：温柔→酷飒 |
+| 二级 | shot_breakdown[1].subjects[0].position | "蜷坐在窗边软垫上" | "靠坐在窗边" | 体态冲突 |
+| 二级 | shot_breakdown[1].shot_description | "女生合上书本..." | "男生合上书本..." | 包含原角色性别 |
+| 三级 | video_info | — | 不变 | 视频信息不改 |
+| 三级 | video_analysis.emotion | — | 不变 | 情绪基调不改 |
+| 三级 | video_analysis.theme/video_type/video_style | — | 不变 | 主题/类型/风格不改 |
+| 三级 | shot_breakdown[].timecode | — | 不变 | 时间码不改 |
+| 三级 | shot_breakdown[].shot_type | — | 不变 | 镜头类型不改 |
+| 三级 | shot_breakdown[].camera_movement | — | 不变 | 镜头运动不改 |
+| 三级 | shot_breakdown[].transition_in/transition_out | — | 不变 | 转场不改 |
+| 三级 | shot_breakdown[].visual.scene | — | 不变 | 场景不改 |
+| 三级 | shot_breakdown[].visual.lighting | — | 不变 | 光线不改 |
+| 三级 | shot_breakdown[].visual.color | — | 不变 | 色彩不改 |
+| 三级 | shot_breakdown[].audio.music | — | 不变 | 音乐不改 |
 
 ---
 
