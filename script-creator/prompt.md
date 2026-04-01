@@ -693,23 +693,201 @@
 
 **所有输出必须为纯 JSON 格式，不要输出任何 Markdown、注释或其他非 JSON 内容。**
 
+**完整 Schema 定义**：参见 [output_schema.json](output_schema.json)
+
 ```json
 {
-  "script_metadata": {
-    "script_type": "[脚本类型]",
-    "target_audience": "[受众画像]",
-    "emotion_tone": "[情绪基调]",
-    "theme_core": "[主题内核]",
-    "scene_sequence": ["[场景A(镜头X-Y)]", "[场景B(镜头Y-Z)]"],
-    "scene_transition_motivation": "[变换动机，单场景时为null]",
+  "video_info": {
+    "title": "[脚本标题]",
     "duration_seconds": 18,
-    "shot_count": 5,
+    "script_type": "[脚本类型]",
+    "time_of_day": "[时间段设定]",
+    "weather": "[天气设定]",
     "character_mode": "[single/multi]",
     "relationship_type": "[情侣/闺蜜/亲子，单角色时为null]",
-    "coordination_strategy": "[协调策略，单角色时为null]",
-    "shared_elements": ["[共同元素]"]
+    "coordination_strategy": "[协调策略，单角色时为null]"
   },
-  "script_summary": "[2-3句话概括整条脚本的核心故事线、情绪弧线和记忆点]",
+  "video_analysis": {
+    "theme": "[视频主题]",
+    "summary": "[脚本概要，2-3句话]",
+    "emotion": {
+      "primary": "[主要情绪]",
+      "secondary": ["[次要情绪1]", "[次要情绪2]"],
+      "emotion_arc": "[情绪变化曲线]"
+    },
+    "target_audience": "[目标受众]",
+    "key_elements": ["[关键元素1]", "[关键元素2]"],
+    "on_screen_presence": {
+      "has_real_person": true,
+      "person_count": 1,
+      "person_details": [
+        {
+          "person_id": 1,
+          "description": "[人物描述]",
+          "visual_weight": "high",
+          "costume_description": "[服饰整体描述]"
+        }
+      ],
+      "exposure_level": "高"
+    },
+    "fashion_placement": {
+      "suitable": true,
+      "reason": "[原因说明]",
+      "placement_strategy": "[植入策略]",
+      "shared_elements": ["[共同视觉元素]"]
+    }
+  },
+  "shot_breakdown": [
+    {
+      "shot_id": 1,
+      "timecode": {
+        "start": "00:00:00",
+        "end": "00:00:03",
+        "duration_seconds": 3.0
+      },
+      "shot_type": "[景别]",
+      "camera_movement": "[运镜方式]",
+      "marker": "[hook/climax_lv1-5/retention_hook/null]",
+      "transition_in": {
+        "type": "[转场类型]",
+        "duration_seconds": 0.5,
+        "color": "[黑/白/自定义]"
+      },
+      "transition_out": {
+        "type": "[转场类型]",
+        "duration_seconds": 0,
+        "color": null
+      },
+      "camera_details": {
+        "focal_length": "[焦距]",
+        "focus": {
+          "subject": "[对焦主体]",
+          "depth_of_field": "[浅/中/深]",
+          "bokeh_quality": "[柔滑/一般/硬边]"
+        },
+        "stabilization": "[稳定方式]",
+        "camera_height": "[机位高度]",
+        "camera_angle": "[拍摄角度]",
+        "lens_effect": {
+          "vignette": "[无/轻微/明显]",
+          "flare": "[无/轻微/明显]",
+          "distortion": "[无/轻微/明显]"
+        }
+      },
+      "visual": {
+        "scene": {
+          "location_type": "[室内/室外]",
+          "specific_location": "[具体场景]",
+          "environment": "[环境描述]",
+          "set_dressing": "[场景布置/道具]"
+        },
+        "composition": {
+          "framing_rule": "[构图法则]",
+          "subject_position": "[主体位置]",
+          "subject_scale": "[主体面积占比]",
+          "facing_direction": "[人物朝向]",
+          "headroom": "[头空间]",
+          "depth": "[景深层次]",
+          "background": "[背景元素]"
+        },
+        "lighting": {
+          "type": "[光源类型]",
+          "direction": "[光线方向]",
+          "color_temperature": "[色温]",
+          "mood": "[光线氛围]",
+          "shadow": "[阴影类型]"
+        },
+        "color": {
+          "dominant_colors": ["[主色调1]", "[主色调2]"],
+          "dominant_color_hex": ["#XXXXXX", "#XXXXXX"],
+          "color_mood": "[色彩情绪]",
+          "color_grade": "[调色风格]",
+          "contrast": "[高/中/低]",
+          "saturation": "[高/中/低/去饱和]",
+          "grain": "[无/轻微/明显/重度]"
+        }
+      },
+      "subjects": [
+        {
+          "subject_id": 1,
+          "type": "人物",
+          "person_id": 1,
+          "description": "[主体描述]",
+          "position": "[画面位置]",
+          "body_angle": "[身体朝向]",
+          "eye_line": "[视线方向]",
+          "action": "[动作描述]",
+          "movement": "[运动方式]",
+          "movement_speed": "[静止/缓慢/正常/快速]",
+          "expression": "[表情]",
+          "clothing": {
+            "top": "[上装描述]",
+            "bottom": "[下装描述]",
+            "accessories": "[配饰]",
+            "overall_style": "[整体风格]",
+            "color_hex": {
+              "top": "#XXXXXX",
+              "bottom": "#XXXXXX"
+            },
+            "exposure_ratio": "60%"
+          },
+          "props": ["[道具1]"]
+        }
+      ],
+      "text_elements": [
+        {
+          "type": "[字幕/标题/贴纸]",
+          "content": "[文字内容]",
+          "position": "[位置]",
+          "style": "[样式]",
+          "animation": "[淡入/弹入/打字机/无]"
+        }
+      ],
+      "speed_effects": {
+        "playback_speed": 1.0,
+        "speed_ramp": null,
+        "freeze_frame": false,
+        "overlay": {
+          "film_grain": false,
+          "light_leak": false,
+          "dust_particles": false
+        }
+      },
+      "audio": {
+        "dialogue": {
+          "speaker": "char_1",
+          "content": "[台词内容]",
+          "tone": "[语调]",
+          "type": "[内心独白/对话/旁白/手机内容]"
+        },
+        "narration": null,
+        "music": {
+          "presence": true,
+          "style": "[音乐风格]",
+          "mood": "[音乐情绪]",
+          "tempo": "[节奏]"
+        },
+        "sound_effects": [
+          {"type": "[音效类型]", "description": "[描述]"}
+        ],
+        "ambient_sound": "[环境音]"
+      },
+      "shot_description": "[镜头整体描述]",
+      "climax_function": "[钩子/高潮描述，仅marker有值时]",
+      "character_interactions": null
+    }
+  ],
+  "editing_analysis": {
+    "total_shots": 5,
+    "average_shot_duration": 3.6,
+    "longest_shot_seconds": 5.0,
+    "shortest_shot_seconds": 2.0,
+    "editing_rhythm": "[剪辑节奏描述]",
+    "pacing": "[快/中/慢]",
+    "cut_style": "[剪辑风格]",
+    "rhythm_template": "[节奏模板]",
+    "climax_distribution": "[高潮分布，如Lv3→Lv4]"
+  },
   "diversity_dimensions": {
     "script_type": {"value": "[类型]", "source": "[来源]", "affinity": "★★★★★"},
     "opening_hook": {"value": "[类型]", "source": "[来源]", "affinity": "★★★★★"},
@@ -722,103 +900,24 @@
     "retention_hook": {"value": "[类型]", "position": "[位置]", "source": "[来源]", "affinity": "★★★★"},
     "innovation_element": {"value": "[元素]", "source": "[来源]", "affinity": "★★★★"},
     "character_coordination": {"value": "[策略]", "source": "[来源]", "affinity": "★★★★★"},
-    "creative_adaptation_level": "[保守/中等/大胆]",
-    "departure_status": {"expression_layer": 0, "breakthrough_layer": 0}
+    "creative_adaptation_level": "[保守/中等/大胆]"
   },
-  "shot_overview": [
-    {
-      "shot_number": 1,
-      "time_range": "00:00-00:03",
-      "scene": "[场景]",
-      "summary": "[概要]",
-      "shot_size": "[景别]",
-      "camera_movement": "[运动]",
-      "marker": "hook",
-      "emotion_flow": "[情绪]"
-    }
-  ],
-  "shots": [
-    {
-      "shot_number": 1,
-      "time_range": "00:00-00:03",
-      "shot_size": "[景别]",
-      "camera_language": "[镜头语言]",
-      "marker": "hook",
-      "scene": "[场景]",
-      "summary": "[分镜概要]",
-      "visual_description": {
-        "composition": "[构图方式]",
-        "lighting": "[光线描述]",
-        "color": "[色彩]",
-        "props": "[场景道具]"
-      },
-      "camera_movement_detail": {
-        "movement_type": "[运动方式]",
-        "start_end": "[起止]",
-        "speed": "[速度]",
-        "focus": "[焦点]"
-      },
-      "costume_integration": "[服饰融入描述]",
-      "performance_direction": {
-        "expression": "[表情]",
-        "body_movement": "[肢体]",
-        "eye_direction": "[眼神]"
-      },
-      "dialogue": {
-        "content": "[台词内容]",
-        "type": "[内心独白/对话/旁白/无台词]"
-      },
-      "sound_design": {
-        "ambient_sound": "[环境音]",
-        "sound_effects": "[音效]",
-        "bgm_status": "[BGM状态]",
-        "silence_design": "[静默设计]"
-      },
-      "transition": "[转场设计]",
-      "post_production": {
-        "color_grading": "[调色]",
-        "speed_effect": "[速度效果]",
-        "text_effects": "[文字/特效]"
-      },
-      "emotion_annotation": "[情绪变化]",
-      "climax_function": "[钩子/高潮描述]",
-      "character_positions": [
-        {
-          "character_id": "char_1",
-          "role": "[主角/配角]",
-          "visual_weight": "high",
-          "position": "[画面位置]",
-          "costume_exposure_ratio": "60%"
-        }
-      ],
-      "character_interactions": {
-        "interaction_action": "[互动动作]",
-        "interaction_rhythm": "[互动时机]"
-      }
-    }
-  ],
   "quality_check": {
     "single_character_check": {
-      "hook_strength": {"result": "[pass/warning/fail]", "score": 18, "max_score": 20, "note": "[说明]"},
-      "emotion_arc": {"result": "[pass/warning/fail]", "score": 18, "max_score": 20, "note": "[说明]"},
-      "memorable_moment": {"result": "[pass/warning/fail]", "score": 12, "max_score": 15, "note": "[说明]"},
-      "innovation": {"result": "[pass/warning/fail]", "score": 12, "max_score": 15, "note": "[说明]"},
-      "costume_naturalness": {"result": "[pass/warning/fail]", "score": 13, "max_score": 15, "note": "[说明]"},
-      "rhythm_balance": {"result": "[pass/warning/fail]", "score": 12, "max_score": 15, "note": "[说明]"},
+      "hook_strength": {"result": "pass", "score": 18, "max_score": 20, "note": "[说明]"},
+      "emotion_arc": {"result": "pass", "score": 18, "max_score": 20, "note": "[说明]"},
+      "memorable_moment": {"result": "pass", "score": 12, "max_score": 15, "note": "[说明]"},
+      "innovation": {"result": "pass", "score": 12, "max_score": 15, "note": "[说明]"},
+      "costume_naturalness": {"result": "pass", "score": 13, "max_score": 15, "note": "[说明]"},
+      "rhythm_balance": {"result": "pass", "score": 12, "max_score": 15, "note": "[说明]"},
       "total_score": 85,
       "max_score": 100
     },
-    "multi_character_check": {
-      "costume_balance": {"result": "[pass/warning/fail]", "score": 13, "max_score": 15, "note": "[说明]"},
-      "coordination_consistency": {"result": "[pass/warning/fail]", "score": 9, "max_score": 10, "note": "[说明]"},
-      "interaction_naturalness": {"result": "[pass/warning/fail]", "score": 9, "max_score": 10, "note": "[说明]"},
-      "total_score": 31,
-      "max_score": 35
-    },
-    "final_score": 82,
+    "multi_character_check": null,
+    "final_score": 85,
     "grade": "⭐⭐⭐⭐",
     "status": "良好，可使用",
-    "optimization_suggestions": "[如有需要]"
+    "optimization_suggestions": null
   },
   "supporting_output": {
     "bgm_suggestion": {
@@ -851,6 +950,7 @@
 **marker 字段值**：
 - `"hook"`：钩子镜头
 - `"climax_lv1"` ~ `"climax_lv5"`：高潮镜头（对应强度等级）
+- `"retention_hook"`：完播钩子
 - `null`：普通镜头
 
 **result 字段值**：
@@ -859,12 +959,11 @@
 - `"fail"`：❌ 不通过
 
 **单角色脚本时省略的字段**：
-- `script_metadata.relationship_type`
-- `script_metadata.coordination_strategy`
-- `script_metadata.shared_elements`
+- `video_info.relationship_type`
+- `video_info.coordination_strategy`
+- `video_analysis.fashion_placement.shared_elements`
 - `diversity_dimensions.character_coordination`
-- `shots[].character_positions`
-- `shots[].character_interactions`
+- `shot_breakdown[].character_interactions`
 - `quality_check.multi_character_check`
 
 ---

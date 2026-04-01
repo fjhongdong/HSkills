@@ -1,0 +1,1020 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Script Creator Output Schema",
+  "description": "短视频脚本创作输出格式定义（结合 script.json 结构化分析 + 脚本创作特性）",
+  "type": "object",
+  "required": ["video_info", "video_analysis", "shot_breakdown", "editing_analysis", "diversity_dimensions", "quality_check", "supporting_output"],
+  "properties": {
+    "video_info": {
+      "type": "object",
+      "description": "视频基本信息",
+      "required": ["title", "duration_seconds", "script_type", "time_of_day", "weather"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "脚本标题"
+        },
+        "duration_seconds": {
+          "type": "number",
+          "description": "脚本总时长（秒）"
+        },
+        "script_type": {
+          "type": "string",
+          "enum": ["剧情/短剧", "日常Vlog", "氛围感/OOTD", "情侣/闺蜜/亲子", "季节/节日/热点", "旅行/探店"],
+          "description": "脚本类型"
+        },
+        "time_of_day": {
+          "type": "string",
+          "enum": ["早晨", "上午", "中午", "下午", "傍晚", "夜晚", "深夜"],
+          "description": "时间段设定"
+        },
+        "weather": {
+          "type": "string",
+          "enum": ["晴天", "阴天", "雨天", "雪天", "雾天", "多云"],
+          "description": "天气设定"
+        },
+        "character_mode": {
+          "type": "string",
+          "enum": ["single", "multi"],
+          "description": "角色模式（单角色/多角色）"
+        },
+        "relationship_type": {
+          "type": ["string", "null"],
+          "enum": ["情侣", "闺蜜", "亲子", null],
+          "description": "关系类型（仅多角色时有效）"
+        },
+        "coordination_strategy": {
+          "type": ["string", "null"],
+          "enum": ["统一风格", "互补风格", "对比风格", "主次风格", null],
+          "description": "角色协调策略（仅多角色时有效）"
+        }
+      }
+    },
+    "video_analysis": {
+      "type": "object",
+      "description": "视频分析",
+      "required": ["theme", "summary", "emotion", "target_audience", "key_elements", "on_screen_presence"],
+      "properties": {
+        "theme": {
+          "type": "string",
+          "description": "视频主题"
+        },
+        "summary": {
+          "type": "string",
+          "description": "脚本概要（2-3句话）"
+        },
+        "emotion": {
+          "type": "object",
+          "required": ["primary", "secondary", "emotion_arc"],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "description": "主要情绪"
+            },
+            "secondary": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "次要情绪列表"
+            },
+            "emotion_arc": {
+              "type": "string",
+              "description": "情绪变化曲线"
+            }
+          }
+        },
+        "target_audience": {
+          "type": "string",
+          "description": "目标受众"
+        },
+        "key_elements": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "关键元素列表"
+        },
+        "on_screen_presence": {
+          "type": "object",
+          "required": ["has_real_person", "person_count", "exposure_level"],
+          "properties": {
+            "has_real_person": {
+              "type": "boolean",
+              "description": "是否有人物出镜"
+            },
+            "person_count": {
+              "type": "integer",
+              "description": "出镜人数"
+            },
+            "person_details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["person_id", "description", "visual_weight", "costume_description"],
+                "properties": {
+                  "person_id": {
+                    "type": "integer",
+                    "description": "人物ID，用于跨镜头追踪"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "人物描述"
+                  },
+                  "visual_weight": {
+                    "type": "string",
+                    "enum": ["high", "medium", "low"],
+                    "description": "视觉权重（主角high/配角medium/群演low）"
+                  },
+                  "costume_description": {
+                    "type": "string",
+                    "description": "服饰整体描述"
+                  }
+                }
+              },
+              "description": "人物详情列表"
+            },
+            "exposure_level": {
+              "type": "string",
+              "enum": ["高", "中", "低"],
+              "description": "露出程度（高>70%/中30-70%/低<30%）"
+            }
+          }
+        },
+        "fashion_placement": {
+          "type": "object",
+          "description": "服饰植入规划",
+          "required": ["suitable", "reason", "placement_strategy"],
+          "properties": {
+            "suitable": {
+              "type": "boolean",
+              "description": "是否适合服饰植入"
+            },
+            "reason": {
+              "type": "string",
+              "description": "原因说明"
+            },
+            "placement_strategy": {
+              "type": "string",
+              "description": "植入策略（如何自然融入）"
+            },
+            "shared_elements": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "多角色共同视觉元素（色调呼应/风格呼应/配饰呼应）"
+            }
+          }
+        }
+      }
+    },
+    "shot_breakdown": {
+      "type": "array",
+      "description": "分镜数组",
+      "items": {
+        "type": "object",
+        "required": ["shot_id", "timecode", "shot_type", "camera_movement", "transition_in", "transition_out", "camera_details", "visual", "subjects", "text_elements", "speed_effects", "audio", "shot_description", "marker"],
+        "properties": {
+          "shot_id": {
+            "type": "integer",
+            "description": "镜头序号"
+          },
+          "timecode": {
+            "type": "object",
+            "required": ["start", "end", "duration_seconds"],
+            "properties": {
+              "start": {
+                "type": "string",
+                "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+                "description": "开始时间码（HH:MM:SS）"
+              },
+              "end": {
+                "type": "string",
+                "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+                "description": "结束时间码（HH:MM:SS）"
+              },
+              "duration_seconds": {
+                "type": "number",
+                "description": "镜头时长（秒）"
+              }
+            }
+          },
+          "shot_type": {
+            "type": "string",
+            "enum": ["大特写", "特写", "近景", "中景", "中全景", "全景", "远景", "大远景"],
+            "description": "景别（8种）"
+          },
+          "camera_movement": {
+            "type": "string",
+            "enum": ["固定镜头", "推镜头", "拉镜头", "摇镜头", "俯仰", "移镜头", "跟镜头", "升降镜头", "环绕", "手持", "组合运镜"],
+            "description": "运镜方式（11种）"
+          },
+          "marker": {
+            "type": ["string", "null"],
+            "enum": ["hook", "climax_lv1", "climax_lv2", "climax_lv3", "climax_lv4", "climax_lv5", "retention_hook", null],
+            "description": "镜头标记（钩子/高潮等级/完播钩子/普通镜头）"
+          },
+          "transition_in": {
+            "type": "object",
+            "required": ["type", "duration_seconds"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["硬切", "淡入", "淡出", "溶解", "划像", "黑场", "闪白", "匹配剪辑", "遮罩转场", "缩放转场", "无缝转场"],
+                "description": "入镜转场类型（11种）"
+              },
+              "duration_seconds": {
+                "type": "number",
+                "description": "转场时长（秒）"
+              },
+              "color": {
+                "type": ["string", "null"],
+                "description": "转场颜色（黑/白/自定义）"
+              }
+            }
+          },
+          "transition_out": {
+            "type": "object",
+            "required": ["type", "duration_seconds"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["硬切", "淡入", "淡出", "溶解", "划像", "黑场", "闪白", "匹配剪辑", "遮罩转场", "缩放转场", "无缝转场"],
+                "description": "出镜转场类型（11种）"
+              },
+              "duration_seconds": {
+                "type": "number",
+                "description": "转场时长（秒）"
+              },
+              "color": {
+                "type": ["string", "null"],
+                "description": "转场颜色"
+              }
+            }
+          },
+          "camera_details": {
+            "type": "object",
+            "required": ["focal_length", "focus", "stabilization", "camera_height", "camera_angle", "lens_effect"],
+            "properties": {
+              "focal_length": {
+                "type": "string",
+                "description": "焦距建议（如35mm）"
+              },
+              "focus": {
+                "type": "object",
+                "required": ["subject", "depth_of_field"],
+                "properties": {
+                  "subject": {
+                    "type": "string",
+                    "description": "对焦主体"
+                  },
+                  "depth_of_field": {
+                    "type": "string",
+                    "enum": ["浅", "中", "深"],
+                    "description": "景深"
+                  },
+                  "bokeh_quality": {
+                    "type": "string",
+                    "enum": ["柔滑", "一般", "硬边"],
+                    "description": "焦外质量"
+                  }
+                }
+              },
+              "stabilization": {
+                "type": "string",
+                "enum": ["三脚架", "稳定器", "肩扛", "手持", "斯坦尼康"],
+                "description": "稳定方式（5种）"
+              },
+              "camera_height": {
+                "type": "string",
+                "enum": ["鸟瞰", "高俯", "微俯", "平视", "微仰", "仰拍", "虫眼"],
+                "description": "机位高度（7种）"
+              },
+              "camera_angle": {
+                "type": "string",
+                "enum": ["正面", "斜侧45°", "侧面", "斜侧135°", "背面"],
+                "description": "拍摄角度（5种）"
+              },
+              "lens_effect": {
+                "type": "object",
+                "properties": {
+                  "vignette": {
+                    "type": "string",
+                    "enum": ["无", "轻微", "明显"],
+                    "description": "暗角"
+                  },
+                  "flare": {
+                    "type": "string",
+                    "enum": ["无", "轻微", "明显"],
+                    "description": "光晕"
+                  },
+                  "distortion": {
+                    "type": "string",
+                    "enum": ["无", "轻微", "明显"],
+                    "description": "畸变"
+                  },
+                  "breathing": {
+                    "type": "string",
+                    "enum": ["无", "轻微", "明显"],
+                    "description": "呼吸感"
+                  },
+                  "leak": {
+                    "type": "string",
+                    "enum": ["无", "轻微", "明显"],
+                    "description": "漏光"
+                  }
+                }
+              }
+            }
+          },
+          "visual": {
+            "type": "object",
+            "required": ["scene", "composition", "lighting", "color"],
+            "properties": {
+              "scene": {
+                "type": "object",
+                "required": ["location_type", "specific_location", "environment"],
+                "properties": {
+                  "location_type": {
+                    "type": "string",
+                    "enum": ["室内", "室外"],
+                    "description": "室内/室外"
+                  },
+                  "specific_location": {
+                    "type": "string",
+                    "description": "具体场景位置"
+                  },
+                  "environment": {
+                    "type": "string",
+                    "description": "环境描述"
+                  },
+                  "set_dressing": {
+                    "type": ["string", "null"],
+                    "description": "场景布置细节/道具"
+                  }
+                }
+              },
+              "composition": {
+                "type": "object",
+                "required": ["framing_rule", "subject_position", "subject_scale", "facing_direction"],
+                "properties": {
+                  "framing_rule": {
+                    "type": "string",
+                    "enum": ["三分法", "居中", "对称", "引导线", "框架构图", "对角线", "黄金螺旋", "留白"],
+                    "description": "构图法则（8种）"
+                  },
+                  "subject_position": {
+                    "type": "string",
+                    "description": "主体位置"
+                  },
+                  "subject_scale": {
+                    "type": "string",
+                    "description": "主体面积占比（约1/4、1/3、1/2、2/3）"
+                  },
+                  "facing_direction": {
+                    "type": "string",
+                    "enum": ["左", "右", "正面", "背面"],
+                    "description": "人物朝向（画面视觉方向）"
+                  },
+                  "headroom": {
+                    "type": "string",
+                    "enum": ["充裕", "适中", "裁切"],
+                    "description": "头空间"
+                  },
+                  "lead_room": {
+                    "type": "string",
+                    "description": "引导空间"
+                  },
+                  "depth": {
+                    "type": "string",
+                    "description": "景深层次描述"
+                  },
+                  "background": {
+                    "type": "string",
+                    "description": "背景元素"
+                  }
+                }
+              },
+              "lighting": {
+                "type": "object",
+                "required": ["type", "direction", "color_temperature", "mood"],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["自然光", "人工光", "混合"],
+                    "description": "光源类型"
+                  },
+                  "direction": {
+                    "type": "string",
+                    "enum": ["正面", "侧面", "逆光", "顶光", "底光"],
+                    "description": "光线方向"
+                  },
+                  "color_temperature": {
+                    "type": "string",
+                    "description": "色温描述"
+                  },
+                  "mood": {
+                    "type": "string",
+                    "description": "光线氛围"
+                  },
+                  "shadow": {
+                    "type": "string",
+                    "enum": ["硬阴影", "柔阴影", "无阴影"],
+                    "description": "阴影类型"
+                  }
+                }
+              },
+              "color": {
+                "type": "object",
+                "required": ["dominant_colors", "color_mood"],
+                "properties": {
+                  "dominant_colors": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "主色调名称列表"
+                  },
+                  "dominant_color_hex": {
+                    "type": "array",
+                    "items": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+                    "description": "主色调十六进制色值列表"
+                  },
+                  "color_mood": {
+                    "type": "string",
+                    "description": "色彩情绪"
+                  },
+                  "color_grade": {
+                    "type": "string",
+                    "description": "调色风格"
+                  },
+                  "contrast": {
+                    "type": "string",
+                    "enum": ["高", "中", "低"],
+                    "description": "对比度"
+                  },
+                  "saturation": {
+                    "type": "string",
+                    "enum": ["高", "中", "低", "去饱和"],
+                    "description": "饱和度"
+                  },
+                  "grain": {
+                    "type": "string",
+                    "enum": ["无", "轻微", "明显", "重度"],
+                    "description": "胶片颗粒感"
+                  }
+                }
+              }
+            }
+          },
+          "subjects": {
+            "type": "array",
+            "description": "主体列表",
+            "items": {
+              "type": "object",
+              "required": ["subject_id", "type", "description", "position", "action"],
+              "properties": {
+                "subject_id": {
+                  "type": "integer",
+                  "description": "主体序号"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["人物", "物体"],
+                  "description": "主体类型"
+                },
+                "person_id": {
+                  "type": ["integer", "null"],
+                  "description": "当type=人物时，关联全局人物ID，用于跨镜头追踪"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "主体描述"
+                },
+                "position": {
+                  "type": "string",
+                  "description": "画面位置"
+                },
+                "body_angle": {
+                  "type": "string",
+                  "enum": ["正面", "3/4侧面", "侧面", "背面"],
+                  "description": "身体朝向"
+                },
+                "eye_line": {
+                  "type": "string",
+                  "description": "视线方向"
+                },
+                "action": {
+                  "type": "string",
+                  "description": "动作描述"
+                },
+                "movement": {
+                  "type": "string",
+                  "description": "运动方式"
+                },
+                "movement_speed": {
+                  "type": "string",
+                  "enum": ["静止", "缓慢", "正常", "快速"],
+                  "description": "运动速度"
+                },
+                "expression": {
+                  "type": ["string", "null"],
+                  "description": "表情描述（人物）"
+                },
+                "clothing": {
+                  "type": ["object", "null"],
+                  "description": "服饰详情（人物）",
+                  "properties": {
+                    "top": {
+                      "type": "string",
+                      "description": "上装描述"
+                    },
+                    "bottom": {
+                      "type": "string",
+                      "description": "下装描述"
+                    },
+                    "accessories": {
+                      "type": ["string", "null"],
+                      "description": "配饰"
+                    },
+                    "overall_style": {
+                      "type": "string",
+                      "description": "整体风格"
+                    },
+                    "color_hex": {
+                      "type": ["object", "null"],
+                      "description": "服饰颜色十六进制值",
+                      "properties": {
+                        "top": { "type": ["string", "null"] },
+                        "bottom": { "type": ["string", "null"] },
+                        "accessories": { "type": ["string", "null"] }
+                      }
+                    },
+                    "exposure_ratio": {
+                      "type": "string",
+                      "description": "服饰露出比例（如'60%'）"
+                    }
+                  }
+                },
+                "props": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "手持道具列表"
+                }
+              }
+            }
+          },
+          "text_elements": {
+            "type": "array",
+            "description": "文字元素列表",
+            "items": {
+              "type": "object",
+              "required": ["type", "content"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["字幕", "标题", "贴纸"],
+                  "description": "文字类型"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "文字内容"
+                },
+                "position": {
+                  "type": "string",
+                  "description": "位置"
+                },
+                "style": {
+                  "type": "string",
+                  "description": "样式"
+                },
+                "animation": {
+                  "type": "string",
+                  "enum": ["淡入", "弹入", "打字机", "无"],
+                  "description": "入场动画"
+                }
+              }
+            }
+          },
+          "speed_effects": {
+            "type": "object",
+            "required": ["playback_speed"],
+            "properties": {
+              "playback_speed": {
+                "type": "number",
+                "description": "播放速度倍率（0.25/0.5/1.0/1.5/2.0）"
+              },
+              "speed_ramp": {
+                "type": ["string", "null"],
+                "description": "变速渐变描述"
+              },
+              "freeze_frame": {
+                "type": "boolean",
+                "description": "是否有定格帧"
+              },
+              "overlay": {
+                "type": "object",
+                "properties": {
+                  "film_grain": { "type": "boolean", "description": "胶片颗粒叠加" },
+                  "light_leak": { "type": "boolean", "description": "漏光效果" },
+                  "dust_particles": { "type": "boolean", "description": "灰尘粒子" },
+                  "color_filter": { "type": ["string", "null"], "description": "色彩滤镜" }
+                }
+              }
+            }
+          },
+          "audio": {
+            "type": "object",
+            "required": ["dialogue", "music"],
+            "properties": {
+              "dialogue": {
+                "type": ["object", "null"],
+                "description": "台词信息",
+                "properties": {
+                  "speaker": { "type": "string", "description": "说话人（char_1/char_2）" },
+                  "content": { "type": "string", "description": "台词内容" },
+                  "tone": { "type": "string", "description": "语调" },
+                  "type": { "type": "string", "enum": ["内心独白", "对话", "旁白", "手机内容"], "description": "台词类型" }
+                }
+              },
+              "narration": {
+                "type": ["object", "null"],
+                "description": "旁白信息",
+                "properties": {
+                  "content": { "type": "string", "description": "旁白内容" },
+                  "tone": { "type": "string", "description": "语调" }
+                }
+              },
+              "music": {
+                "type": "object",
+                "required": ["presence"],
+                "properties": {
+                  "presence": { "type": "boolean", "description": "是否有背景音乐" },
+                  "style": { "type": ["string", "null"], "description": "音乐风格" },
+                  "mood": { "type": ["string", "null"], "description": "音乐情绪" },
+                  "tempo": { "type": ["string", "null"], "description": "节奏" }
+                }
+              },
+              "sound_effects": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": { "type": "string", "description": "音效类型" },
+                    "description": { "type": "string", "description": "描述" }
+                  }
+                },
+                "description": "音效列表"
+              },
+              "ambient_sound": {
+                "type": ["string", "null"],
+                "description": "环境音"
+              }
+            }
+          },
+          "shot_description": {
+            "type": "string",
+            "description": "镜头整体描述（一句话概括画面内容）"
+          },
+          "climax_function": {
+            "type": ["string", "null"],
+            "description": "高潮功能描述（仅marker为高潮或钩子时有值）"
+          },
+          "character_interactions": {
+            "type": ["object", "null"],
+            "description": "角色互动（仅多角色时有效）",
+            "properties": {
+              "interaction_action": { "type": "string", "description": "互动动作" },
+              "interaction_rhythm": { "type": "string", "description": "互动时机" }
+            }
+          }
+        }
+      }
+    },
+    "editing_analysis": {
+      "type": "object",
+      "description": "剪辑节奏分析",
+      "required": ["total_shots", "average_shot_duration", "editing_rhythm", "pacing", "cut_style", "rhythm_template"],
+      "properties": {
+        "total_shots": {
+          "type": "integer",
+          "description": "总镜头数"
+        },
+        "average_shot_duration": {
+          "type": "number",
+          "description": "平均镜头时长（秒）"
+        },
+        "longest_shot_seconds": {
+          "type": "number",
+          "description": "最长镜头时长（秒）"
+        },
+        "shortest_shot_seconds": {
+          "type": "number",
+          "description": "最短镜头时长（秒）"
+        },
+        "editing_rhythm": {
+          "type": "string",
+          "description": "剪辑节奏描述"
+        },
+        "pacing": {
+          "type": "string",
+          "enum": ["快", "中", "慢"],
+          "description": "节奏快慢"
+        },
+        "cut_style": {
+          "type": "string",
+          "description": "剪辑风格"
+        },
+        "rhythm_template": {
+          "type": "string",
+          "enum": ["单高潮极简型", "双高潮经典型", "三高潮完整型", "递进高潮型", "反转高潮型", "情绪波动型"],
+          "description": "节奏模板"
+        },
+        "climax_distribution": {
+          "type": "string",
+          "description": "高潮分布（如'Lv3→Lv4'）"
+        }
+      }
+    },
+    "diversity_dimensions": {
+      "type": "object",
+      "description": "十一维度选择记录",
+      "required": ["script_type", "opening_hook", "narrative_structure", "emotion_tone", "visual_style", "camera_language", "dialogue_style", "rhythm_template", "retention_hook", "innovation_element"],
+      "properties": {
+        "script_type": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "opening_hook": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "narrative_structure": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "emotion_tone": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "visual_style": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "camera_language": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "dialogue_style": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "rhythm_template": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "climax_distribution": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "retention_hook": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "position": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "innovation_element": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "character_coordination": {
+          "type": ["object", "null"],
+          "properties": {
+            "value": { "type": "string" },
+            "source": { "type": "string" },
+            "affinity": { "type": "string" }
+          }
+        },
+        "creative_adaptation_level": {
+          "type": "string",
+          "enum": ["保守", "中等", "大胆"],
+          "description": "创意适配度等级"
+        }
+      }
+    },
+    "quality_check": {
+      "type": "object",
+      "description": "质量检查",
+      "required": ["single_character_check", "final_score", "grade", "status"],
+      "properties": {
+        "single_character_check": {
+          "type": "object",
+          "description": "单角色六维度检查",
+          "required": ["hook_strength", "emotion_arc", "memorable_moment", "innovation", "costume_naturalness", "rhythm_balance"],
+          "properties": {
+            "hook_strength": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "emotion_arc": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "memorable_moment": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "innovation": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "costume_naturalness": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "rhythm_balance": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "total_score": { "type": "integer" },
+            "max_score": { "type": "integer", "const": 100 }
+          }
+        },
+        "multi_character_check": {
+          "type": ["object", "null"],
+          "description": "多角色三维度检查（仅多角色时有效）",
+          "properties": {
+            "costume_balance": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "coordination_consistency": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "interaction_naturalness": {
+              "type": "object",
+              "properties": {
+                "result": { "type": "string", "enum": ["pass", "warning", "fail"] },
+                "score": { "type": "integer" },
+                "max_score": { "type": "integer" },
+                "note": { "type": "string" }
+              }
+            },
+            "total_score": { "type": "integer" },
+            "max_score": { "type": "integer", "const": 35 }
+          }
+        },
+        "final_score": {
+          "type": "integer",
+          "description": "最终得分"
+        },
+        "grade": {
+          "type": "string",
+          "description": "评级（⭐⭐⭐⭐⭐/⭐⭐⭐⭐/⭐⭐⭐/⭐⭐）"
+        },
+        "status": {
+          "type": "string",
+          "description": "状态描述"
+        },
+        "optimization_suggestions": {
+          "type": ["string", "null"],
+          "description": "优化建议"
+        }
+      }
+    },
+    "supporting_output": {
+      "type": "object",
+      "description": "配套输出",
+      "required": ["bgm_suggestion", "title_suggestions", "hashtags", "publish_suggestion"],
+      "properties": {
+        "bgm_suggestion": {
+          "type": "object",
+          "required": ["music_style", "emotion_match", "tempo_suggestion"],
+          "properties": {
+            "music_style": { "type": "string", "description": "音乐风格" },
+            "emotion_match": { "type": "string", "description": "情绪匹配" },
+            "tempo_suggestion": { "type": "string", "description": "节奏建议" },
+            "reference_tracks": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "参考曲目"
+            }
+          }
+        },
+        "title_suggestions": {
+          "type": "array",
+          "description": "标题建议（3种类型）",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["叙事型", "金句型", "提问型"] },
+              "title": { "type": "string" }
+            }
+          }
+        },
+        "hashtags": {
+          "type": "object",
+          "properties": {
+            "trending": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "热点标签（1-2个）"
+            },
+            "emotion": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "情绪标签（1-2个）"
+            },
+            "costume": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "服饰标签（1-2个）"
+            },
+            "scene": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "场景标签（1个）"
+            }
+          }
+        },
+        "publish_suggestion": {
+          "type": "object",
+          "properties": {
+            "best_publish_time": { "type": "string", "description": "最佳发布时间" },
+            "cover_suggestion": { "type": "string", "description": "封面建议" }
+          }
+        }
+      }
+    }
+  }
+}
