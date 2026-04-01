@@ -182,21 +182,22 @@
 - 格式与输入完全一致，不增不减字段
 - 原始 `null` 字段保持 `null`
 - JSON 语法正确，可被程序解析
-- 使用标准 JSON 格式，不使用 Markdown 代码块包裹（除非用户明确要求）
+- 使用标准 JSON 格式，不使用 Markdown 代码块包裹
 
 ---
 
 ## 输出格式
 
-直接输出改写后的完整 JSON，格式要求：
+**只输出改写后的纯 JSON，不输出任何其他内容。**
+
+格式要求：
 1. 保持原始 JSON 的字段顺序和层级结构
 2. 不添加任何新字段
 3. 不删除任何原有字段
 4. `null` 值保持 `null`
 5. 数值类型保持数值（不加引号）
 6. 字符串类型使用双引号
-
-改写完成后，可选输出一份简短的**改动清单**，列出所有改动的字段及其原因（仅在用户要求时输出）。
+7. **禁止输出**：说明文字、改动清单、分析过程、Markdown 代码块标记（```json）等任何非 JSON 内容
 
 ---
 
@@ -583,38 +584,6 @@
   ]
 }
 
-### 改动清单（可选输出）
-
-| 级别 | 字段 | 原值 | 新值 | 改写原因 |
-|------|------|------|------|----------|
-| 全局 | video_analysis.summary | "...一个女生..." | "...一个男生..." | 概要中提到原角色性别 |
-| 全局 | video_analysis.key_elements | "慵懒穿搭" | "街头酷飒穿搭" | 角色相关元素替换 |
-| 全局 | video_analysis.on_screen_presence.person_details[0].description | "年轻女性，约25岁，气质温柔文艺" | "22岁男生，酷飒街头风，性格外向开朗" | 全局人物描述同步更新 |
-| 一级 | shot_breakdown[0].subjects[0].description | "年轻女性，约25岁，气质温柔文艺" | "22岁男生，酷飒街头风，性格外向开朗" | 角色直接替换 |
-| 一级 | shot_breakdown[0].subjects[0].clothing.top | "米色慵懒风卫衣，宽松版型" | "黑色oversized卫衣" | 穿搭直接替换 |
-| 一级 | shot_breakdown[0].subjects[0].clothing.bottom | "灰色休闲裤" | "卡其色工装裤" | 穿搭直接替换 |
-| 一级 | shot_breakdown[0].subjects[0].clothing.overall_style | "慵懒家居风" | "街头酷飒风" | 穿搭直接替换 |
-| 一级 | shot_breakdown[0].subjects[0].expression | "平静专注，嘴角微微上扬" | "嘴角带笑，眼神明亮放松" | 气质调整 |
-| 一级 | shot_breakdown[1].subjects[0].description | "年轻女性，约25岁，气质温柔文艺" | "22岁男生，酷飒街头风，性格外向开朗" | 角色直接替换 |
-| 一级 | shot_breakdown[1].subjects[0].clothing | 慵懒家居风 | 街头酷飒风 | 穿搭直接替换 |
-| 二级 | shot_breakdown[0].subjects[0].position | "蜷坐在窗边软垫上" | "靠坐在窗边" | 体态冲突：蜷坐对成年男性不自然 |
-| 二级 | shot_breakdown[0].subjects[0].action | "专注看书，偶尔翻页" | "随手翻着书，时不时望向窗外" | 气质冲突：温柔内向→外向开朗的行为差异 |
-| 二级 | shot_breakdown[0].shot_description | "女生蜷坐...米色卫衣..." | "男生靠坐...黑色卫衣..." | 包含原角色性别和服饰，需同步更新 |
-| 二级 | shot_breakdown[0].audio.narration.tone | "温柔内心独白" | "随性内心独白" | 气质冲突：温柔→酷飒 |
-| 二级 | shot_breakdown[1].subjects[0].position | "蜷坐在窗边软垫上" | "靠坐在窗边" | 体态冲突 |
-| 二级 | shot_breakdown[1].shot_description | "女生合上书本..." | "男生合上书本..." | 包含原角色性别 |
-| 三级 | video_info | — | 不变 | 视频信息不改 |
-| 三级 | video_analysis.emotion | — | 不变 | 情绪基调不改 |
-| 三级 | video_analysis.theme/video_type/video_style | — | 不变 | 主题/类型/风格不改 |
-| 三级 | shot_breakdown[].timecode | — | 不变 | 时间码不改 |
-| 三级 | shot_breakdown[].shot_type | — | 不变 | 镜头类型不改 |
-| 三级 | shot_breakdown[].camera_movement | — | 不变 | 镜头运动不改 |
-| 三级 | shot_breakdown[].transition_in/transition_out | — | 不变 | 转场不改 |
-| 三级 | shot_breakdown[].visual.scene | — | 不变 | 场景不改 |
-| 三级 | shot_breakdown[].visual.lighting | — | 不变 | 光线不改 |
-| 三级 | shot_breakdown[].visual.color | — | 不变 | 色彩不改 |
-| 三级 | shot_breakdown[].audio.music | — | 不变 | 音乐不改 |
-
 ---
 
 ## 用户输入模板
@@ -644,4 +613,4 @@
 1. 分镜脚本 JSON
 2. 新角色描述
 
-收到输入后，按照上述流程执行改写，输出完整的改写后 JSON。
+收到输入后，按照上述流程执行改写，**只输出改写后的纯 JSON，不输出任何其他内容**。
