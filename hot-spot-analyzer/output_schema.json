@@ -1,0 +1,379 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hot Spot Analyzer Output Schema",
+  "description": "热点深度分析器输出格式定义",
+  "type": "object",
+  "required": ["batch_analysis", "emotion_summary", "theme_summary", "deduction_summary", "tags_keywords_summary", "prediction_summary", "creation_suggestions"],
+  "properties": {
+    "batch_analysis": {
+      "type": "object",
+      "description": "批量分析汇总",
+      "required": ["total_count", "emotion_distribution", "issue_clustering", "emotion_trend", "user_deep_demand"],
+      "properties": {
+        "total_count": {
+          "type": "integer",
+          "description": "热点总数"
+        },
+        "emotion_distribution": {
+          "type": "object",
+          "description": "情绪分布",
+          "properties": {
+            "anxiety": {
+              "type": "object",
+              "description": "焦虑类情绪",
+              "properties": {
+                "count": { "type": "integer", "description": "数量" },
+                "percentage": { "type": "integer", "description": "占比" },
+                "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点列表" }
+              }
+            },
+            "healing": {
+              "type": "object",
+              "description": "治愈类情绪",
+              "properties": {
+                "count": { "type": "integer", "description": "数量" },
+                "percentage": { "type": "integer", "description": "占比" },
+                "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点列表" }
+              }
+            },
+            "resonance": {
+              "type": "object",
+              "description": "共鸣类情绪",
+              "properties": {
+                "count": { "type": "integer", "description": "数量" },
+                "percentage": { "type": "integer", "description": "占比" },
+                "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点列表" }
+              }
+            }
+          }
+        },
+        "issue_clustering": {
+          "type": "array",
+          "description": "议题聚合",
+          "items": {
+            "type": "object",
+            "required": ["issue", "related_hotspots", "heat", "deep_demand"],
+            "properties": {
+              "issue": { "type": "string", "description": "议题名称" },
+              "related_hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" },
+              "heat": { "type": "string", "enum": ["high", "medium", "low"], "description": "热度" },
+              "deep_demand": { "type": "string", "description": "深层需求" }
+            }
+          }
+        },
+        "emotion_trend": {
+          "type": "string",
+          "description": "情绪趋势判断"
+        },
+        "user_deep_demand": {
+          "type": "string",
+          "description": "用户深层需求汇总"
+        }
+      }
+    },
+    "emotion_summary": {
+      "type": "object",
+      "description": "情绪分析汇总",
+      "required": ["surface_emotion_distribution", "high_frequency_emotion_words", "deep_emotion_focus", "emotion_contradictions", "emotion_outlets"],
+      "properties": {
+        "surface_emotion_distribution": {
+          "type": "object",
+          "description": "表层情绪分布（百分比）",
+          "properties": {
+            "anxiety": { "type": "integer", "description": "焦虑占比" },
+            "healing": { "type": "integer", "description": "治愈占比" },
+            "resonance": { "type": "integer", "description": "共鸣占比" }
+          }
+        },
+        "high_frequency_emotion_words": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "高频情绪词"
+        },
+        "deep_emotion_focus": {
+          "type": "array",
+          "description": "深层情绪聚焦",
+          "items": {
+            "type": "object",
+            "properties": {
+              "emotion": { "type": "string", "description": "情绪类型" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "emotion_contradictions": {
+          "type": "array",
+          "description": "情绪矛盾点",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "description": "矛盾类型" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "emotion_outlets": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "情绪出口"
+        }
+      }
+    },
+    "theme_summary": {
+      "type": "object",
+      "description": "主题分析汇总",
+      "required": ["core_issues", "core_pain_points", "audience_profiles", "value_propositions"],
+      "properties": {
+        "core_issues": {
+          "type": "array",
+          "description": "核心议题",
+          "items": {
+            "type": "object",
+            "properties": {
+              "issue": { "type": "string", "description": "议题名称" },
+              "heat": { "type": "string", "enum": ["high", "medium", "low"], "description": "热度" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" },
+              "background": { "type": "string", "description": "背景说明" }
+            }
+          }
+        },
+        "core_pain_points": {
+          "type": "array",
+          "description": "核心痛点",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pain_point": { "type": "string", "description": "痛点描述" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "audience_profiles": {
+          "type": "array",
+          "description": "受众画像",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "description": "受众类型" },
+              "percentage": { "type": "integer", "description": "占比" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "value_propositions": {
+          "type": "array",
+          "description": "价值主张",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value": { "type": "string", "description": "价值主张" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        }
+      }
+    },
+    "deduction_summary": {
+      "type": "object",
+      "description": "推演结果汇总",
+      "required": ["scenes", "styles", "storylines", "character_states"],
+      "properties": {
+        "scenes": {
+          "type": "array",
+          "description": "推演场景",
+          "items": {
+            "type": "object",
+            "properties": {
+              "scene": { "type": "string", "description": "场景描述" },
+              "emotion": { "type": "string", "description": "对应情绪" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "styles": {
+          "type": "array",
+          "description": "推演风格",
+          "items": {
+            "type": "object",
+            "properties": {
+              "style": { "type": "string", "description": "风格描述" },
+              "emotion": { "type": "string", "description": "对应情绪" },
+              "visual": { "type": "string", "description": "视觉特征" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "storylines": {
+          "type": "array",
+          "description": "推演故事线",
+          "items": {
+            "type": "object",
+            "properties": {
+              "storyline": { "type": "string", "description": "故事线" },
+              "emotion_arc": { "type": "string", "description": "情绪弧线" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "character_states": {
+          "type": "array",
+          "description": "人物状态推演",
+          "items": {
+            "type": "object",
+            "properties": {
+              "state": { "type": "string", "description": "人物状态" },
+              "emotion": { "type": "string", "description": "对应情绪" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        }
+      }
+    },
+    "tags_keywords_summary": {
+      "type": "object",
+      "description": "标签与关键词汇总",
+      "required": ["emotion_tags", "theme_tags", "scene_tags", "style_tags", "audience_tags", "core_keywords", "emotion_keywords", "visual_keywords"],
+      "properties": {
+        "emotion_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "情绪标签"
+        },
+        "theme_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "主题标签"
+        },
+        "scene_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "场景标签"
+        },
+        "style_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "风格标签"
+        },
+        "audience_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "受众标签"
+        },
+        "core_keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "核心关键词"
+        },
+        "emotion_keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "情绪关键词"
+        },
+        "visual_keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "视觉关键词"
+        }
+      }
+    },
+    "prediction_summary": {
+      "type": "object",
+      "description": "题材预测汇总",
+      "required": ["script_types", "spread_potential", "viral_possibility"],
+      "properties": {
+        "script_types": {
+          "type": "array",
+          "description": "适合脚本类型",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "description": "脚本类型" },
+              "hotspot_count": { "type": "integer", "description": "适合的热点数量" },
+              "suitability": { "type": "string", "enum": ["高", "中", "低"], "description": "适配度" },
+              "hotspots": { "type": "array", "items": { "type": "string" }, "description": "相关热点" }
+            }
+          }
+        },
+        "spread_potential": {
+          "type": "object",
+          "description": "传播潜力",
+          "properties": {
+            "高": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "hotspots": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "中": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "hotspots": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "低": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "hotspots": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "viral_possibility": {
+          "type": "object",
+          "description": "爆款可能性",
+          "properties": {
+            "高": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "hotspots": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "中高": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "hotspots": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "中": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "hotspots": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "creation_suggestions": {
+      "type": "object",
+      "description": "创作建议",
+      "required": ["recommended_script_type", "recommended_hook_type", "key_points", "cautions"],
+      "properties": {
+        "recommended_script_type": {
+          "type": "string",
+          "description": "推荐脚本类型"
+        },
+        "recommended_hook_type": {
+          "type": "string",
+          "description": "推荐钩子类型"
+        },
+        "key_points": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "关键要点"
+        },
+        "cautions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "注意事项"
+        }
+      }
+    }
+  }
+}
