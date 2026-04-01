@@ -228,8 +228,7 @@
   "video_info": {
     "title": "独居治愈时光",
     "duration_seconds": 8.0,
-    "source": "用户上传",
-    "analysis_date": "2026-03-30"
+    "source": "用户上传"
   },
   "video_analysis": {
     "title": "独居治愈时光",
@@ -410,8 +409,7 @@
   "video_info": {
     "title": "独居治愈时光",
     "duration_seconds": 8.0,
-    "source": "用户上传",
-    "analysis_date": "2026-03-30"
+    "source": "用户上传"
   },
   "video_analysis": {
     "title": "独居治愈时光",

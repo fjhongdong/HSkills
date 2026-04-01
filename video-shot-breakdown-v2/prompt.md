@@ -207,7 +207,6 @@
     "title": "视频标题",
     "duration_seconds": 30.0,
     "source": "来源说明（如：用户上传/抖音链接等）",
-    "analysis_date": "分析日期",
     "time_of_day": "时间段（早晨/上午/中午/下午/傍晚/夜晚/深夜）",
     "weather": "天气状况（晴天/阴天/雨天/雪天/雾天/多云/不确定）"
   },
@@ -449,7 +448,6 @@
     "title": "独居治愈时光",
     "duration_seconds": 8.0,
     "source": "用户上传",
-    "analysis_date": "2026-03-30",
     "time_of_day": "下午",
     "weather": "晴天"
   },
