@@ -199,7 +199,9 @@
 
 ## 五、输出格式
 
-严格按照以下 JSON 结构输出，所有字段完整填充：
+严格按照以下 JSON 结构输出，所有字段完整填充。
+
+**完整 Schema 定义**：参见 [output_schema.json](output_schema.json)
 
 ```json
 {
