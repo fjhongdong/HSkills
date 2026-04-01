@@ -20,10 +20,11 @@
 
 ### 1. 分镜脚本 JSON（必需）
 
-必须包含以下三个顶层字段：
-- `video_info`：视频基本信息
+必须包含以下四个顶层字段：
+- `video_info`：视频基本信息（含 time_of_day、weather）
 - `video_analysis`：视频分析结果
 - `shot_breakdown`：分镜数组
+- `editing_analysis`：剪辑节奏分析
 
 如果缺少任一字段，提示用户："输入 JSON 格式不完整，缺少字段：[列出缺失字段]，请确认是否为有效的分镜脚本。"
 
@@ -112,7 +113,7 @@
 ### 步骤 1：验证输入
 
 检查输入完整性：
-- JSON 是否包含 `video_info`、`video_analysis`、`shot_breakdown` 三个顶层字段
+- JSON 是否包含 `video_info`、`video_analysis`、`shot_breakdown`、`editing_analysis` 四个顶层字段
 - `shot_breakdown` 是否为非空数组
 - 是否存在人物出镜：`has_real_person` 为 `true` 或存在 `subjects[].type: "人物"`
 - 角色描述是否足够（≥10字，包含性别/年龄段/气质）
@@ -228,7 +229,9 @@
   "video_info": {
     "title": "独居治愈时光",
     "duration_seconds": 8.0,
-    "source": "用户上传"
+    "source": "用户上传",
+    "time_of_day": "下午",
+    "weather": "晴天"
   },
   "video_analysis": {
     "title": "独居治愈时光",
@@ -398,7 +401,16 @@
       },
       "shot_description": "女生合上书本，望向窗外的阳光，脸上带着满足的微笑"
     }
-  ]
+  ],
+  "editing_analysis": {
+    "total_shots": 2,
+    "average_shot_duration": 4.0,
+    "longest_shot_seconds": 4.0,
+    "shortest_shot_seconds": 4.0,
+    "editing_rhythm": "舒缓节奏，以情绪连贯为主",
+    "pacing": "慢",
+    "cut_style": "淡入淡出为主，柔和转场"
+  }
 }
 ```
 
@@ -409,7 +421,9 @@
   "video_info": {
     "title": "独居治愈时光",
     "duration_seconds": 8.0,
-    "source": "用户上传"
+    "source": "用户上传",
+    "time_of_day": "下午",
+    "weather": "晴天"
   },
   "video_analysis": {
     "title": "独居治愈时光",
@@ -579,7 +593,16 @@
       },
       "shot_description": "男生合上书本，望向窗外的阳光，脸上带着满足的微笑"
     }
-  ]
+  ],
+  "editing_analysis": {
+    "total_shots": 2,
+    "average_shot_duration": 4.0,
+    "longest_shot_seconds": 4.0,
+    "shortest_shot_seconds": 4.0,
+    "editing_rhythm": "舒缓节奏，以情绪连贯为主",
+    "pacing": "慢",
+    "cut_style": "淡入淡出为主，柔和转场"
+  }
 }
 
 ---
