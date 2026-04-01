@@ -199,9 +199,7 @@
 
 ## 五、输出格式
 
-严格按照以下 JSON 结构输出，所有字段完整填充。
-
-**完整 Schema 定义**：参见 [output_schema.json](output_schema.json)
+严格按照以下 JSON 结构输出，所有字段完整填充：
 
 ```json
 {
@@ -431,6 +429,8 @@
 
 ## 六、输出要求
 
+**只输出纯 JSON，不输出任何其他内容。**
+
 1. 严格按 JSON 格式输出，所有字段完整填充
 2. 不确定的字段标注"不确定"，不要编造数值
 3. 数值型估算字段可给范围（如焦距"35-50mm（估算）"）
@@ -439,6 +439,7 @@
 6. `dominant_color_hex` 必须与 `dominant_colors` 一一对应
 7. `fashion_placement` 仅在 `has_real_person = true` 时输出，否则为 null
 8. 不适用的字段使用 null，不要省略
+9. **禁止输出**：说明文字、分析过程、Markdown 代码块标记（```json）等任何非 JSON 内容
 
 ## 七、输出示例
 
